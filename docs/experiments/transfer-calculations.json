@@ -1,0 +1,33 @@
+{
+  "baseline": "SLIM_Transfer_Start_v1",
+  "baseline_sha256": "6fc99f34d3a2deedd70ae68706ea50d3f5cca3e20c833aad0385f536b7bdb03d",
+  "input_snapshot_sha256_lf": "66490fadfee95940d1ab48880723c10151f4dc4060d2579ff7c0cd9505845c6d",
+  "scope": "Circular coplanar diagnostic estimate using the measured semi-major axes and target-plane projection; not an executable trajectory",
+  "encounter_verified": false,
+  "automatic_burn_authorized": false,
+  "requires_spatial_encounter_prediction": true,
+  "relative_inclination_deg": 12.767004636011421,
+  "projected_phase_deg": 50.115095036723766,
+  "target_circular_phase_deg": 110.65972402918014,
+  "circular_wait_estimate_s": 1674.8535086331183,
+  "candidate_node_ut": 4524.891594231863,
+  "candidate_burn_start_ut": 4496.138149448466,
+  "ideal_transfer_delta_v_m_s": 837.0572366180314,
+  "kerbin_circularization_delta_v_m_s_not_mun_capture": 361.6093254303848,
+  "ideal_transfer_duration_s": 26770.041742518057,
+  "constant_thrust_burn_duration_s": 57.50688956679307,
+  "burn_propellant_kg": 1019.8383938989593,
+  "engine_reachable_propellant_kg": 2000.0,
+  "protected_central_propellant_kg": 433.0,
+  "central_propellant_after_burn_kg": 980.1616061010407,
+  "limitations": [
+    "Projected phase has a nonconstant rate on an inclined orbit",
+    "No three-dimensional encounter or Mun periapsis has been predicted",
+    "Half-duration centering is a finite-burn approximation, not trajectory integration",
+    "Mun capture and landing remain separate fuel expenditures"
+  ],
+  "calculation_source_sha256_lf": {
+    "math_logic.py": "4ab3df988c87a4eeb7c9ff7082336f15155cecf9a1bb15a6d7e1997e7e22add7",
+    "plan_transfer.py": "fecabfdf0c49367d548a2d3029682d5128814b0456e9c90d10d8442aac6f84a7"
+  }
+}

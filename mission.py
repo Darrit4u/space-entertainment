@@ -31,24 +31,22 @@ class SlimAutopilot:
         self.r1 = self.vessel.orbit.semi_major_axis
         self.r2 = self.mun.orbit.semi_major_axis
 
-        self.phase_target = OrbitalMath.required_phase_angle(self.r1, self.r2)
-        self.phase_tolerance = math.radians(1)
-
         # Landing PID
         self.KP = 0.04
         self.KD = 0.2
 
-        self.launch_ut: float = 0.0
+        self.launch_ut = None
         self.logger = FlightLogger(self.vessel, self.sc)
 
     # --------------------------------------------------
     # PHASE 1 — PHASE ANGLE WAIT
     # --------------------------------------------------
     def phase_1_compute_launch_time(self):
+        self.launch_ut = None
         if self.vessel.orbit.body != self.kerbin:
             raise ValueError('The full mission must start from a Kerbin orbit')
         self.logger.log(phase='planning', event='phase_start')
-        print('[Phase 1] Computing correct launch UT')
+        print('[Phase 1] Computing a circular coplanar launch estimate')
 
         r_ship = self.r1
         r_mun = self.r2
@@ -61,9 +59,14 @@ class SlimAutopilot:
         )
         ship_pos = self.vessel.position(self.orbital_rf)
         mun_pos = self.mun.position(self.orbital_rf)
+        ship_velocity = self.vessel.velocity(self.orbital_rf)
+        mun_velocity = self.mun.velocity(self.orbital_rf)
+        inclination = OrbitalMath.relative_inclination(ship_pos, ship_velocity, mun_pos, mun_velocity)
+        if inclination > 1e-7:
+            raise ValueError('Inclined orbit requires 3D encounter prediction; circular phase alone cannot schedule an automatic burn')
 
         phi_current = OrbitalMath.current_phase_angle(
-            ship_pos, mun_pos
+            ship_pos, mun_pos, mun_velocity
         )
 
         t_wait = OrbitalMath.time_to_phase_angle(
@@ -82,12 +85,24 @@ class SlimAutopilot:
     # PHASE 2 — TRANSFER
     # --------------------------------------------------
     def phase_2_transfer(self):
+        if self.launch_ut is None:
+            raise ValueError('No coplanar launch estimate; transfer planning is incomplete')
         self.logger.log(phase='transfer', event='phase_start')
         print('[Phase 2] Executing timed transfer burn')
 
         dv1, _ = OrbitalMath.hohmann_delta_v(
             self.mu, self.r1, self.r2
         )
+        main = [e for e in self.vessel.parts.engines if e.part.name == 'liquidEngine3.v2' and e.active]
+        if len(main) != 1 or any(e.active and e != main[0] for e in self.vessel.parts.engines):
+            raise ValueError('Transfer estimate requires only the active Terrier')
+        propellants = {p.name: p.total_resource_available for p in main[0].propellants}
+        # Stock LF/Ox mixture 9:11 by resource units, 5 kg per unit.
+        reachable = 100 * min(propellants.get('LiquidFuel', 0) / 9, propellants.get('Oxidizer', 0) / 11)
+        duration, _ = OrbitalMath.burn_duration(dv1, self.vessel.mass, self.vessel.available_thrust, main[0].vacuum_specific_impulse, max(0, reachable - 433))
+        burn_start_ut = self.launch_ut - duration / 2
+        if self.sc.ut >= burn_start_ut:
+            raise ValueError('Estimated burn start has passed; recalculate the transfer window')
 
         node = self.vessel.control.add_node(
             ut=self.launch_ut,
@@ -100,7 +115,7 @@ class SlimAutopilot:
 
         print('[Phase 2] Waiting for burn time')
 
-        while self.sc.ut < self.launch_ut - 20:
+        while self.sc.ut < burn_start_ut:
             time.sleep(0.2)
 
         self.logger.log(event='burn_start')
