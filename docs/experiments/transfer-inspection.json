@@ -1,0 +1,270 @@
+{
+  "source_save": "Орбита 2",
+  "source_sha256_before": "d3e9b365f328e077e54b391f465571fd9cc5b740bce9e40fbe5eccd1b73dcd6e",
+  "restore_save": "SLIM_Full_Landed_v1",
+  "inspection": {
+    "ut": 2850.038085598744,
+    "paused": true,
+    "name": "SLIM",
+    "body": "Kerbin",
+    "situation": "orbiting",
+    "parts": 55,
+    "part_counts": {
+      "HECS2.ProbeCore": 1,
+      "externalTankRound": 4,
+      "sGripPad": 4,
+      "Panel0": 30,
+      "Triangle0": 6,
+      "LgRadialSolarPanel": 3,
+      "smallRadialEngine.v2": 2,
+      "RelayAntenna5": 1,
+      "Decoupler.0": 1,
+      "noseConeAdapter": 1,
+      "fuelTank": 1,
+      "liquidEngine3.v2": 1
+    },
+    "mass_kg": 4653.0,
+    "dry_mass_kg": 2213.0,
+    "throttle": 0.0,
+    "thrust_N": 0.0,
+    "available_thrust_N": 60000.0,
+    "available_torque_Nm": [
+      [
+        10000.0,
+        10000.0,
+        10000.0
+      ],
+      [
+        -10000.0,
+        -10000.0,
+        -10000.0
+      ]
+    ],
+    "reaction_wheels": 1,
+    "decouplers": 1,
+    "electric_charge": 1000.0,
+    "resources": {
+      "LiquidFuel": 219.60000610351562,
+      "Oxidizer": 268.3999938964844
+    },
+    "engines": [
+      {
+        "part": "smallRadialEngine.v2",
+        "active": false,
+        "has_fuel": true,
+        "max_vacuum_thrust_N": 16000.0,
+        "vacuum_specific_impulse_s": 290.0,
+        "propellants": [
+          {
+            "name": "LiquidFuel",
+            "reachable_units": 39.6
+          },
+          {
+            "name": "Oxidizer",
+            "reachable_units": 48.4
+          }
+        ]
+      },
+      {
+        "part": "smallRadialEngine.v2",
+        "active": false,
+        "has_fuel": true,
+        "max_vacuum_thrust_N": 16000.0,
+        "vacuum_specific_impulse_s": 290.0,
+        "propellants": [
+          {
+            "name": "LiquidFuel",
+            "reachable_units": 39.6
+          },
+          {
+            "name": "Oxidizer",
+            "reachable_units": 48.4
+          }
+        ]
+      },
+      {
+        "part": "liquidEngine3.v2",
+        "active": true,
+        "has_fuel": true,
+        "max_vacuum_thrust_N": 60000.0,
+        "vacuum_specific_impulse_s": 345.0,
+        "propellants": [
+          {
+            "name": "LiquidFuel",
+            "reachable_units": 180.0
+          },
+          {
+            "name": "Oxidizer",
+            "reachable_units": 220.0
+          }
+        ]
+      }
+    ],
+    "fuel_parts": [
+      {
+        "part": "externalTankRound",
+        "mass_kg": 123.75000762939453,
+        "dry_mass_kg": 13.750009536743164,
+        "decouple_stage": -1,
+        "resources": {
+          "LiquidFuel": 9.899999618530273,
+          "Oxidizer": 12.100000381469727
+        }
+      },
+      {
+        "part": "externalTankRound",
+        "mass_kg": 123.75000762939453,
+        "dry_mass_kg": 13.750009536743164,
+        "decouple_stage": -1,
+        "resources": {
+          "LiquidFuel": 9.899999618530273,
+          "Oxidizer": 12.100000381469727
+        }
+      },
+      {
+        "part": "externalTankRound",
+        "mass_kg": 123.75000762939453,
+        "dry_mass_kg": 13.750009536743164,
+        "decouple_stage": -1,
+        "resources": {
+          "LiquidFuel": 9.899999618530273,
+          "Oxidizer": 12.100000381469727
+        }
+      },
+      {
+        "part": "externalTankRound",
+        "mass_kg": 123.75000762939453,
+        "dry_mass_kg": 13.750009536743164,
+        "decouple_stage": -1,
+        "resources": {
+          "LiquidFuel": 9.899999618530273,
+          "Oxidizer": 12.100000381469727
+        }
+      },
+      {
+        "part": "noseConeAdapter",
+        "mass_kg": 100.0,
+        "dry_mass_kg": 100.0,
+        "decouple_stage": 0,
+        "resources": {
+          "LiquidFuel": 0.0
+        }
+      },
+      {
+        "part": "fuelTank",
+        "mass_kg": 2250.0,
+        "dry_mass_kg": 250.0,
+        "decouple_stage": 0,
+        "resources": {
+          "LiquidFuel": 180.0,
+          "Oxidizer": 220.0
+        }
+      }
+    ],
+    "orbit": {
+      "semi_major_axis_m": 706324.6897133552,
+      "eccentricity": 0.0031768544579419255,
+      "inclination_rad": 0.22282626651578735,
+      "longitude_ascending_node_rad": 0.2911085295773046,
+      "argument_periapsis_rad": 3.374001228073555,
+      "apoapsis_altitude_m": 108568.58045262552,
+      "periapsis_altitude_m": 104080.7989740849,
+      "period_s": 1984.726622984762,
+      "radius_m": 708350.8246173684,
+      "time_to_periapsis_s": 851.6196203015045
+    },
+    "position_inertial_m": [
+      405702.0128942267,
+      97848.66495446005,
+      572356.8871222478
+    ],
+    "velocity_inertial_m_s": [
+      -1823.9910992246598,
+      384.17815886501756,
+      1223.448835453453
+    ],
+    "mun_position_inertial_m": [
+      -3062322.005355994,
+      0.0,
+      11602680.032454247
+    ],
+    "mun_velocity_inertial_m_s": [
+      -524.5322567947596,
+      0.0,
+      -138.44100397568826
+    ],
+    "kerbin": {
+      "mu_m3_s2": 3531599999999.9995,
+      "radius_m": 600000.0
+    },
+    "mun": {
+      "mu_m3_s2": 65138397520.78069,
+      "radius_m": 200000.0,
+      "soi_radius_m": 2429559.1165647474,
+      "semi_major_axis_m": 12000000.0,
+      "inclination_rad": 0.0,
+      "period_s": 138984.37657447575
+    }
+  },
+  "baseline": {
+    "name": "SLIM_Transfer_Start_v1",
+    "file": "saves/SLIM_Transfer_Start_v1.sfs",
+    "sha256": "6fc99f34d3a2deedd70ae68706ea50d3f5cca3e20c833aad0385f536b7bdb03d",
+    "ut": 2850.038085598744,
+    "note": "KSP-native snapshot of the inspected paused state; no engines or autopilot were commanded"
+  },
+  "analysis": {
+    "assumptions": "Circular coplanar two-body Hohmann values are diagnostics only; no encounter is predicted and no maneuver is created",
+    "relative_plane_angle_deg": 12.767004636011421,
+    "mun_elevation_above_ship_plane_deg": 12.75991033120532,
+    "legacy_xy_phase_deg": 166.44016303874577,
+    "phase_projected_in_mun_plane_deg": 50.11509503672377,
+    "target_circular_phase_deg": 110.65972402918014,
+    "legacy_unused_required_phase_deg": -67.38203145213431,
+    "ideal_transfer_delta_v_m_s": 837.0572366180314,
+    "ideal_transfer_time_s": 26770.041742518057,
+    "ideal_burn_duration_s": 57.50688956679306,
+    "ideal_burn_half_duration_s": 28.75344478339653,
+    "ideal_mass_after_transfer_kg": 3633.161606101041,
+    "terrier_reachable_propellant_kg": 2000,
+    "module_propellant_kg": 440,
+    "ideal_terrier_delta_v_to_empty_m_s": 1900.8060894004727,
+    "low_orbit_full_plane_change_estimate_m_s": 497.222871538423,
+    "coplanar_v_infinity_estimate_m_s": 361.6093254303848,
+    "coplanar_capture_to_15x25km_estimate_m_s": 301.6660628362596,
+    "reference_mun_start_mass_kg": 3085.957275390625,
+    "ideal_pre_descent_delta_v_budget_preserving_reference_mass_m_s": 1389.3506758481833,
+    "legacy_wait_counterexample": {
+      "initial_phase_deg": 90,
+      "target_phase_deg": 110,
+      "omega_ship_rad_s": 0.003,
+      "omega_target_rad_s": 5e-05,
+      "legacy_wait_s": 118.32740691486967,
+      "predicted_phase_after_legacy_wait_deg": 70.00000000000003
+    },
+    "mun_baseline_component_counts_match": true,
+    "component_comparison_note": "Counts and dry mass match; no assertion of identical orientation, orbital phase or terrain"
+  },
+  "source_sha256_after": "d3e9b365f328e077e54b391f465571fd9cc5b740bce9e40fbe5eccd1b73dcd6e",
+  "code_sha256": {
+    "math_logic.py": "1de5239374546dd7eb57b83fe5e41ff314a0a3cc7ba79d417db44c23cbee8cd1",
+    "mission.py": "2a17611c247a99f896e5ce47d7772e6df9f0c67bc9a6e3aaec23b90241ef10f6",
+    "landing.py": "8db8f14a71c596161cf754a67d8baefd2f8e52cf3292fb4f5ffb6cd895ad5e26"
+  },
+  "restored_state": {
+    "save": "SLIM_Full_Landed_v1",
+    "parts": 51,
+    "situation": "landed",
+    "paused": true,
+    "throttle": 0,
+    "thrust_N": 0,
+    "basis": "Verified live after restore in the inspection session"
+  },
+  "landing_interface_probe": {
+    "kind": "mock control-flow probe; no KSP control or flight",
+    "available_thrust_N": 60000,
+    "parts_at_handoff": 55,
+    "outcome": "ready_for_vertical_descent",
+    "issue": "With fuel remaining, braking can return the intact 55-part vessel; --full requires a detached 51-part module next"
+  }
+}
