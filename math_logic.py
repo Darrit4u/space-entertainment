@@ -181,3 +181,14 @@ class OrbitalMath:
             raise ValueError("Burn exceeds engine-reachable propellant or protected reserve")
         return required * exhaust_speed / thrust, required
 
+    @staticmethod
+    def capture_delta_v(mu, periapsis_radius, incoming_eccentricity, target_apoapsis_radius):
+        """Ideal periapsis retro-burn from a hyperbola/parabola to an ellipse."""
+        if not all(math.isfinite(x) for x in (mu, periapsis_radius, incoming_eccentricity, target_apoapsis_radius)):
+            raise ValueError("Capture parameters must be finite")
+        if mu <= 0 or periapsis_radius <= 0 or incoming_eccentricity < 1 or target_apoapsis_radius < periapsis_radius:
+            raise ValueError("Capture requires an incoming unbound orbit and apoapsis >= periapsis")
+        arrival_speed = math.sqrt(mu*(1+incoming_eccentricity)/periapsis_radius)
+        target_speed = math.sqrt(mu*(2/periapsis_radius-2/(periapsis_radius+target_apoapsis_radius)))
+        return arrival_speed-target_speed
+

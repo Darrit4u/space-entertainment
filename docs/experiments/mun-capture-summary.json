@@ -1,0 +1,94 @@
+{
+  "scope": "Two actual Mun SOI entries and captures before the subsequently identified warp-setter fix",
+  "trials": [
+    {
+      "trial": 1,
+      "result": "docs/experiments/mun-capture-trial-1.json",
+      "telemetry": "logs/flight_20261101T175320_238727Z.csv",
+      "rows": 925,
+      "actual_entry_ut": 32690.270224276945,
+      "final_periapsis_m": 67907.7098727973,
+      "final_apoapsis_m": 100263.39112430852,
+      "specific_energy_j_kg": -114645.74211266033,
+      "eccentricity": 0.056947073152310866,
+      "central_propellant_kg": 713.9777221679688,
+      "module_propellant_kg": 440.0,
+      "verification_duration_s": 30.019999995194667,
+      "verified_last_30s_samples": 137,
+      "ideal_capture_delta_v_m_s": 244.41255202618623,
+      "mass_equivalent_delta_v_m_s": 244.33665072865884,
+      "thrust_integral_delta_v_m_s": 257.71556388125964,
+      "integral_relative_error": 0.05475606345876605,
+      "actual_burn_ut_duration_s": 27.519999995594844
+    },
+    {
+      "trial": 2,
+      "result": "docs/experiments/mun-capture-trial-2.json",
+      "telemetry": "logs/flight_20261101T175844_914245Z.csv",
+      "rows": 920,
+      "actual_entry_ut": 32690.27577115194,
+      "final_periapsis_m": 67920.17407461366,
+      "final_apoapsis_m": 100256.62967932865,
+      "specific_energy_j_kg": -114644.59142015546,
+      "eccentricity": 0.05691266414092956,
+      "central_propellant_kg": 713.9530639648438,
+      "module_propellant_kg": 440.0,
+      "verification_duration_s": 30.039999995191465,
+      "verified_last_30s_samples": 137,
+      "ideal_capture_delta_v_m_s": 244.41255116706014,
+      "mass_equivalent_delta_v_m_s": 244.3614285168435,
+      "thrust_integral_delta_v_m_s": 256.4759079672346,
+      "integral_relative_error": 0.04957607067498415,
+      "actual_burn_ut_duration_s": 27.539999995591643
+    }
+  ],
+  "evidence_files": [
+    {
+      "file": "logs/flight_20261101T175320_238727Z.csv",
+      "sha256": "deeff5d71ca34e7ed410a6aa1e79cbe43541c939d2a9850bdea12e33749676bf"
+    },
+    {
+      "file": "logs/flight_20261101T175320_238727Z.json",
+      "sha256": "90894125428954676ac91b120a696953bcae4f4f5e0a95b45ed1ded1a375967c"
+    },
+    {
+      "file": "logs/flight_20261101T175844_914245Z.csv",
+      "sha256": "6aa188213d85b71b799ad9dac7ecff5b69b1b8c7c8029871a3637eea4f055bf6"
+    },
+    {
+      "file": "logs/flight_20261101T175844_914245Z.json",
+      "sha256": "180ec6d69e62ef1e54ee5b16bb577c2c16e1a23f6e776c2d20b546690c610009"
+    }
+  ],
+  "flight_tested_code_sha256_lf": {
+    "capture.py": "2b434b124adca704499e82f5da02b5185eb22d5a520f8109c50d42faa1dc57a4",
+    "math_logic.py": "8485e59de6cb1f3dd49cbc026d88fc19bff2a280f5da3af9836ee23bc0f97cb3",
+    "logger.py": "825057e7ec5072a2d132ac5c9d3122618dea12e0986e7de8437991b1dc052a00",
+    "transfer.py": "4de8518070bbd042c565652b82008cab8c409313e824806ff62cb13b64a5afbe"
+  },
+  "selected_checkpoint": {
+    "name": "SLIM_Mun_Captured_v1",
+    "file": "saves/SLIM_Mun_Captured_v1.sfs",
+    "sha256": "544e98ac6bb87b165d6a72cf2cd20263cfa6910ee327722c91ede1041650987c",
+    "source_trial": 2,
+    "ut": 38513.309355116064,
+    "parts": 55,
+    "mass_kg": 3366.953125,
+    "periapsis_m": 67920.17407461366,
+    "apoapsis_m": 100256.62967932865,
+    "paused": true,
+    "throttle": 0.0,
+    "thrust_N": 0.0,
+    "sas": false
+  },
+  "baseline_sha256": "14212575c4e44afd52efd96d73efddcb02d8018fe96c01c9bdc54c5d6f77328a",
+  "reload_verification": {
+    "ut": 38514.869355115814,
+    "parts": 55,
+    "body": "Mun",
+    "periapsis_m": 67920.17152205942,
+    "apoapsis_m": 100256.61967293738,
+    "paused": true,
+    "next_orbit": null
+  }
+}
