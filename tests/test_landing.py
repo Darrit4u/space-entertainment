@@ -1,9 +1,11 @@
 import itertools
+from pathlib import Path
+import tempfile
 from types import SimpleNamespace
 import unittest
 from unittest.mock import MagicMock, PropertyMock, patch
 
-from landing import run_landing
+from landing import brake_to_descent, run_landing
 
 
 class LandingPreparationTests(unittest.TestCase):
@@ -40,6 +42,7 @@ class LandingPreparationTests(unittest.TestCase):
         self.log = self.logger_patch.start().return_value
         self.addCleanup(self.logger_patch.stop)
         self.log.error = None
+        self.log.vessel = self.vessel
         self.print_patch = patch("builtins.print")
         self.print_patch.start()
         self.addCleanup(self.print_patch.stop)
@@ -117,6 +120,72 @@ class LandingPreparationTests(unittest.TestCase):
         self.ap.disengage.assert_called_once()
         self.assertEqual(self.ctrl.throttle, 0)
         self.log.close.assert_called_once()
+
+    def test_brake_mode_stops_at_descent_handoff(self):
+        with patch("landing.time.sleep"), patch("landing.brake_to_descent", return_value="ready_for_vertical_descent") as braking:
+            self.assertEqual(run_landing(self.conn, brake=True), "ready_for_vertical_descent")
+        braking.assert_called_once_with(self.conn, self.vessel, self.log, 900.0)
+        self.assertEqual(self.ctrl.throttle, 0)
+        self.assertTrue(self.conn.krpc.paused)
+        self.assertEqual(self.sc.rails_warp_factor, 0)
+        self.ap.disengage.assert_called_once()
+
+    def test_brake_error_restores_zero_throttle_and_pauses(self):
+        with patch("landing.time.sleep"), patch("landing.brake_to_descent", side_effect=RuntimeError("reserve depleted")):
+            with self.assertRaisesRegex(RuntimeError, "reserve depleted"):
+                run_landing(self.conn, brake=True)
+        self.assertEqual(self.ctrl.throttle, 0)
+        self.assertTrue(self.conn.krpc.paused)
+        self.log.close.assert_called_once()
+
+    def test_invalid_braking_timeout_does_not_start(self):
+        with self.assertRaises(ValueError):
+            run_landing(self.conn, brake=True, brake_timeout=float("nan"))
+        self.ap.engage.assert_not_called()
+
+    def test_empty_terrier_switches_to_module_and_saves_handoff(self):
+        self.body.reference_frame = "surface"
+        self.body.non_rotating_reference_frame = "inertial"
+        self.body.gravitational_parameter = 6.513839752e10
+        self.body.equatorial_radius = 200000
+        self.vessel.orbit.radius = 224000
+        self.vessel.orbit.periapsis_altitude = -5001
+        self.vessel.vacuum_specific_impulse = 345
+        self.vessel.dry_mass = 2213
+        self.vessel.velocity = lambda frame: (0, 500, 0)
+        flight = SimpleNamespace(surface_altitude=8000, horizontal_speed=100, vertical_speed=-5, speed=100)
+        self.vessel.flight = lambda frame: flight
+        self.vessel.parts.controlling = SimpleNamespace(vessel=self.vessel)
+        radial = self.vessel.parts.engines[1:]
+
+        def separate():
+            self.vessel.parts.engines = radial
+            self.vessel.available_thrust = 32000
+            self.vessel.mass = 1793
+            self.vessel.dry_mass = 1353
+
+        decoupler = MagicMock()
+        decoupler.decouple.side_effect = separate
+        self.vessel.parts.decouplers = [decoupler]
+
+        def phase_transition(**kwargs):
+            if kwargs.get("phase") == "main_braking":
+                self.vessel.available_thrust = 0
+            if kwargs.get("phase") == "landing_braking":
+                flight.horizontal_speed = 1
+            return {"event": kwargs.get("event")}
+
+        self.log.log.side_effect = phase_transition
+        with tempfile.TemporaryDirectory(prefix="braking-test-", dir=Path(__file__).parent) as directory:
+            self.log.filename = Path(directory) / "flight.csv"
+            with patch("landing.time.sleep"):
+                self.assertEqual(brake_to_descent(self.conn, self.vessel, self.log, 30), "ready_for_vertical_descent")
+            self.assertTrue(self.log.filename.with_suffix(".handoff.json").exists())
+        decoupler.decouple.assert_called_once()
+        self.assertTrue(all(e.active for e in radial))
+        self.assertEqual(self.ctrl.throttle, 0)
+        self.assertTrue(self.conn.krpc.paused)
+        self.sc.save.assert_called_once()
 
 
 if __name__ == "__main__":

@@ -1,0 +1,299 @@
+{
+  "trials": [
+    {
+      "trial": 1,
+      "baseline": "SLIM_Landing_Start_v1",
+      "error": "RuntimeError('No available thrust during braking')",
+      "final": {
+        "mass_kg": 2653.0,
+        "parts": 55,
+        "altitude_m": 7139.869003845961,
+        "horizontal_speed_m_s": 50.201890678856245,
+        "vertical_speed_m_s": -14.077777973224784,
+        "throttle": 0.9025302529335022,
+        "thrust_N": 0.0,
+        "paused": true
+      },
+      "log": "logs/flight_20261101T133843_606105Z.csv",
+      "rows": 879,
+      "events": [
+        {
+          "t": "0.0",
+          "phase": "initial",
+          "event": "run_start",
+          "altitude": "19908.30078645583",
+          "horizontal_speed": "524.6426833808652",
+          "vertical_speed": "-7.276202905480176",
+          "mass": "3085.957275390625",
+          "delta_v": "0.0"
+        },
+        {
+          "t": "0.01999999999679858",
+          "phase": "landing_preflight",
+          "event": "check_start",
+          "altitude": "19908.30078645583",
+          "horizontal_speed": "524.6426833808652",
+          "vertical_speed": "-7.276202905480176",
+          "mass": "3085.957275390625",
+          "delta_v": "0.0"
+        },
+        {
+          "t": "0.03999999999359716",
+          "phase": "landing_preflight",
+          "event": "preflight_passed",
+          "altitude": "19909.609667593584",
+          "horizontal_speed": "524.6433924046933",
+          "vertical_speed": "-7.277174672242921",
+          "mass": "3085.957275390625",
+          "delta_v": "0.0"
+        },
+        {
+          "t": "0.059999999990395736",
+          "phase": "landing_orientation",
+          "event": "alignment_start",
+          "altitude": "19909.609667593584",
+          "horizontal_speed": "524.6433924046933",
+          "vertical_speed": "-7.277174672242921",
+          "mass": "3085.957275390625",
+          "delta_v": "0.0"
+        },
+        {
+          "t": "0.2799999999551801",
+          "phase": "landing_orientation",
+          "event": "ready_for_deorbit",
+          "altitude": "19916.91776191542",
+          "horizontal_speed": "524.6472937769316",
+          "vertical_speed": "-7.282518244996652",
+          "mass": "3085.957275390625",
+          "delta_v": "0.0"
+        },
+        {
+          "t": "0.2999999999519787",
+          "phase": "deorbit",
+          "event": "burn_start",
+          "altitude": "19917.948564138496",
+          "horizontal_speed": "524.6476485904249",
+          "vertical_speed": "-7.283003923871064",
+          "mass": "3085.957275390625",
+          "delta_v": "0.0"
+        },
+        {
+          "t": "7.899999998735439",
+          "phase": "deorbit_coast",
+          "event": "burn_end",
+          "altitude": "20643.58589899863",
+          "horizontal_speed": "511.14378106714753",
+          "vertical_speed": "-7.337945656469742",
+          "mass": "3073.11767578125",
+          "delta_v": "14.135726177895005"
+        },
+        {
+          "t": "507.8201977276767",
+          "phase": "main_braking",
+          "event": "burn_start",
+          "altitude": "7975.8964303559915",
+          "horizontal_speed": "543.5944687091669",
+          "vertical_speed": "-38.2272585010634",
+          "mass": "3073.08203125",
+          "delta_v": "14.1942986271984"
+        },
+        {
+          "t": "531.7601977238446",
+          "phase": "main_braking",
+          "event": "landing_error",
+          "altitude": "7140.683495366946",
+          "horizontal_speed": "50.201705808380105",
+          "vertical_speed": "-14.019324359744203",
+          "mass": "2653.0",
+          "delta_v": "510.8275184044797"
+        }
+      ],
+      "diagnosis": "Terrier cannot access module tanks; stopped at lower-stage propellant depletion. Also observed delayed throttle application before pause; fixed by waiting for physics updates."
+    },
+    {
+      "trial": 2,
+      "baseline": "SLIM_Landing_Start_v1",
+      "change": "Separate exhausted Terrier stage and finish residual braking with radial engines; apply zero throttle before pausing.",
+      "outcome": "ready_for_vertical_descent",
+      "final": {
+        "mass_kg": 1759.27490234375,
+        "dry_mass_kg": 1353.0,
+        "parts": 51,
+        "altitude_m": 6067.180865366827,
+        "horizontal_speed_m_s": 4.913075023560548,
+        "vertical_speed_m_s": -6.657516503552797,
+        "throttle": 0.0,
+        "thrust_N": 0.0,
+        "paused": true
+      },
+      "log": "logs/flight_20261101T134530_616057Z.csv",
+      "rows": 1009,
+      "events": [
+        {
+          "t": "0.0",
+          "phase": "initial",
+          "event": "run_start",
+          "altitude": "19970.69449593473",
+          "horizontal_speed": "526.3855541637812",
+          "vertical_speed": "-9.207764429134812",
+          "mass": "3085.957275390625",
+          "delta_v": "0.0"
+        },
+        {
+          "t": "0.01999999999679858",
+          "phase": "landing_preflight",
+          "event": "check_start",
+          "altitude": "19969.048690223717",
+          "horizontal_speed": "526.3860055823034",
+          "vertical_speed": "-9.208171076280621",
+          "mass": "3085.957275390625",
+          "delta_v": "0.0"
+        },
+        {
+          "t": "0.03999999999359716",
+          "phase": "landing_preflight",
+          "event": "preflight_passed",
+          "altitude": "19966.3672210598",
+          "horizontal_speed": "526.3869084814227",
+          "vertical_speed": "-9.208984309536788",
+          "mass": "3085.957275390625",
+          "delta_v": "0.0"
+        },
+        {
+          "t": "0.059999999990395736",
+          "phase": "landing_orientation",
+          "event": "alignment_start",
+          "altitude": "19966.3672210598",
+          "horizontal_speed": "526.3869084814227",
+          "vertical_speed": "-9.208984309536788",
+          "mass": "3085.957275390625",
+          "delta_v": "0.0"
+        },
+        {
+          "t": "0.2799999999551801",
+          "phase": "landing_orientation",
+          "event": "ready_for_deorbit",
+          "altitude": "19951.953131182876",
+          "horizontal_speed": "526.391875905227",
+          "vertical_speed": "-9.213455620118594",
+          "mass": "3085.957275390625",
+          "delta_v": "0.0"
+        },
+        {
+          "t": "0.2999999999519787",
+          "phase": "deorbit",
+          "event": "burn_start",
+          "altitude": "19950.20147907536",
+          "horizontal_speed": "526.3923276111525",
+          "vertical_speed": "-9.213861980876857",
+          "mass": "3085.957275390625",
+          "delta_v": "0.0"
+        },
+        {
+          "t": "8.339999998665007",
+          "phase": "deorbit_coast",
+          "event": "burn_end",
+          "altitude": "19758.218095356104",
+          "horizontal_speed": "512.7245028270071",
+          "vertical_speed": "-10.225147213216786",
+          "mass": "3072.33740234375",
+          "delta_v": "15.11177806694587"
+        },
+        {
+          "t": "498.7642175001165",
+          "phase": "main_braking",
+          "event": "burn_start",
+          "altitude": "7993.713410928729",
+          "horizontal_speed": "546.6023161318515",
+          "vertical_speed": "-37.9146871460853",
+          "mass": "3072.3017578125",
+          "delta_v": "15.219968897634509"
+        },
+        {
+          "t": "522.8642174962588",
+          "phase": "main_braking",
+          "event": "braking_stage_empty",
+          "altitude": "6200.974627147254",
+          "horizontal_speed": "53.972802315490995",
+          "vertical_speed": "-15.026671685377071",
+          "mass": "2653.0",
+          "delta_v": "513.7905478723428"
+        },
+        {
+          "t": "523.8042174961083",
+          "phase": "landing_braking",
+          "event": "braking_stage_separated",
+          "altitude": "6175.804079286463",
+          "horizontal_speed": "53.725222172959434",
+          "vertical_speed": "-16.263856507206185",
+          "mass": "1793.0",
+          "delta_v": "513.7905478723428"
+        },
+        {
+          "t": "531.6442174948534",
+          "phase": "descent_handoff",
+          "event": "main_braking_complete",
+          "altitude": "6067.331441461691",
+          "horizontal_speed": "4.913059932102152",
+          "vertical_speed": "-6.627605116795493",
+          "mass": "1759.27490234375",
+          "delta_v": "566.4522152638749"
+        }
+      ],
+      "handoff": {
+        "save": "SLIM_Descent_Ready_20261101T134913_920594Z",
+        "planned_deorbit_delta_v_m_s": 14.220541925718067,
+        "telemetry": "C:\\Users\\Asus\\education\\5_sem\\space-entertainment\\logs\\flight_20261101T134530_616057Z.csv",
+        "handoff": {
+          "t": 531.6442174948534,
+          "ut": 63912.2645428156,
+          "phase": "descent_handoff",
+          "event": "main_braking_complete",
+          "body": "Mun",
+          "situation": "sub_orbital",
+          "altitude": 6067.331441461691,
+          "mean_altitude": 8628.463696330582,
+          "radius": 208628.46369634508,
+          "latitude": -6.628612217052698,
+          "longitude": 55.55129270963535,
+          "speed": 15.741449010400325,
+          "surface_speed": 8.25004893807312,
+          "vertical_speed": -6.627605116795493,
+          "horizontal_speed": 4.913059932102152,
+          "target_vertical_speed": null,
+          "mass": 1759.27490234375,
+          "dry_mass": 1353.0,
+          "throttle": 0.0,
+          "thrust": 0.0,
+          "available_thrust": 32000.0,
+          "specific_impulse": 290.0,
+          "liquid_fuel": 36.564735412597656,
+          "oxidizer": 44.69023132324219,
+          "electric_charge": 995.407958984375,
+          "apoapsis": 8643.149831930583,
+          "periapsis": -199931.8648743275,
+          "delta_v": 566.4522152638749,
+          "sample_dt": 0.11999999998079147
+        },
+        "landing_module_propellant_kg": 406.2748336791992
+      }
+    }
+  ],
+  "selected_checkpoint": {
+    "save": "SLIM_Descent_Ready_v1",
+    "ut": 63912.2645428156,
+    "situation": "sub_orbital",
+    "mass_kg": 1759.27490234375,
+    "dry_mass_kg": 1353.0,
+    "terrain_altitude_m": 6067.180865366827,
+    "mean_altitude_m": 8628.330845145305,
+    "horizontal_speed_m_s": 4.913075023560548,
+    "vertical_speed_m_s": -6.657516503552797,
+    "propellant_kg": 406.27490234375,
+    "ideal_remaining_delta_v_m_s": 746.7513162406939,
+    "parts": 51,
+    "throttle": 0.0,
+    "thrust_N": 0.0,
+    "paused": true
+  }
+}
