@@ -1,0 +1,126 @@
+{
+  "scope": "Two captured-Mun-orbit preparations and read-only landing checks; no deorbit or landing",
+  "trials": [
+    {
+      "trial": 1,
+      "result": "docs/experiments/landing-orbit-trial-1.json",
+      "telemetry": "logs/flight_20261101T182343_433811Z.csv",
+      "rows": 980,
+      "periapsis_m": 15231.280462843453,
+      "apoapsis_m": 25232.191033657262,
+      "central_propellant_kg": 650.66943359375,
+      "module_propellant_kg": 440.0,
+      "planned_total_delta_v_m_s": 64.3956480054793,
+      "mass_equivalent_delta_v_m_s": 64.19603899451818,
+      "thrust_integral_delta_v_m_s": 60.19277602930771,
+      "integral_relative_error": -0.062359968432823654,
+      "verification_duration_s": 30.09999999518186,
+      "verified_last_30s_samples": 137,
+      "landing_preflight": "preflight_passed"
+    },
+    {
+      "trial": 2,
+      "result": "docs/experiments/landing-orbit-trial-2.json",
+      "telemetry": "logs/flight_20261101T182828_268076Z.csv",
+      "rows": 977,
+      "periapsis_m": 15241.728087337251,
+      "apoapsis_m": 25232.194808378816,
+      "central_propellant_kg": 650.6740112304688,
+      "module_propellant_kg": 440.0,
+      "planned_total_delta_v_m_s": 64.39530991390194,
+      "mass_equivalent_delta_v_m_s": 64.19128852502381,
+      "thrust_integral_delta_v_m_s": 64.87341249420402,
+      "integral_relative_error": 0.010626425872636958,
+      "verification_duration_s": 30.059999995188264,
+      "verified_last_30s_samples": 137,
+      "landing_preflight": "preflight_passed"
+    }
+  ],
+  "evidence_files": [
+    {
+      "file": "logs/flight_20261101T182343_383255Z.csv",
+      "sha256": "387abffa7663dabffdd7439c32c359a627194a472f062e58ce0c1d0bc06d9aa1"
+    },
+    {
+      "file": "logs/flight_20261101T182343_383255Z.json",
+      "sha256": "fc22e2faa7ae845d09ae6412ba3aefeed486b902b9aca579fc7474ea67a6de82"
+    },
+    {
+      "file": "logs/flight_20261101T182343_433811Z.csv",
+      "sha256": "21da3f785784cbdc61235ef0f69545e99bb004d3f6ef85411124057cfcddb3a0"
+    },
+    {
+      "file": "logs/flight_20261101T182343_433811Z.json",
+      "sha256": "cb1e1852c7c0f8c30b3a84848f1c47ec595a19d82118acb8ebf269a5f97d9cb5"
+    },
+    {
+      "file": "logs/flight_20261101T182718_318731Z.csv",
+      "sha256": "17ec02725800d1ea1095fd9e0777423be676aa14784a974fc2d29f99747e93ac"
+    },
+    {
+      "file": "logs/flight_20261101T182718_318731Z.json",
+      "sha256": "384831585dec4b5bffddffaa85fbd2e9e09c62570fc40811019a515c160ed51a"
+    },
+    {
+      "file": "logs/flight_20261101T182828_216294Z.csv",
+      "sha256": "1a3c46e5581b809168b1671949bf3c2aef5e8480248e5f280f23a58783d366ec"
+    },
+    {
+      "file": "logs/flight_20261101T182828_216294Z.json",
+      "sha256": "bd1aedeae1673b6253cb45384a4058bcb2f48208401d5cc51ccbdae03c270b9a"
+    },
+    {
+      "file": "logs/flight_20261101T182828_268076Z.csv",
+      "sha256": "82f27e09e954a60f4daf273f98b14f90eb8eb1304764c4d1f05e2bc46e357631"
+    },
+    {
+      "file": "logs/flight_20261101T182828_268076Z.json",
+      "sha256": "38b0d07c3e19fd1b7fdbb640073db94a9c1b9a16a7b1ff0eb64d01a9aa9bbe04"
+    },
+    {
+      "file": "logs/flight_20261101T183202_582323Z.csv",
+      "sha256": "8f04eef4023964500dc345b213dbe65a1f8a4be567a3ce235a5f27af30061e48"
+    },
+    {
+      "file": "logs/flight_20261101T183202_582323Z.json",
+      "sha256": "a2071e995dc9d94189f83e30c464421557b29384252cfbc6385aacc401b1d08d"
+    }
+  ],
+  "code_sha256_lf": {
+    "prepare_landing.py": "6a108eb2a8fd32c5cf4ca598fbcf7ea970a104f58ca9d51f6d0c0cd96b51993b",
+    "math_logic.py": "2130a8c41fb4cf9118597c54927df87a8c3e7ff54886258ccbba745891f28152",
+    "transfer.py": "3979f33c34e531d15b0f1df20f827b60b2cf898ebb136652b51ce6fcc5022a83",
+    "landing.py": "be2163f5f7a21113f2c8ab1a5cc1c4ce2b5941ec7eb3e0c57dc12ea4c25fcccc",
+    "logger.py": "825057e7ec5072a2d132ac5c9d3122618dea12e0986e7de8437991b1dc052a00"
+  },
+  "selected_checkpoint": {
+    "name": "SLIM_Landing_Ready_v1",
+    "file": "saves/SLIM_Landing_Ready_v1.sfs",
+    "sha256": "579ecd4644b3935d8aa58f99759ded2cf9dd1aad1c9fb8d42363bc098f6e99a0",
+    "source_trial": 2,
+    "ut": 41980.13550743083,
+    "parts": 55,
+    "mass_kg": 3303.674072265625,
+    "dry_mass_kg": 2213.0,
+    "periapsis_m": 15241.728087337251,
+    "apoapsis_m": 25232.194808378816,
+    "eccentricity": 0.02268117634606671,
+    "paused": true,
+    "throttle": 0.0,
+    "thrust_N": 0.0,
+    "sas": false
+  },
+  "baseline_sha256": "544e98ac6bb87b165d6a72cf2cd20263cfa6910ee327722c91ede1041650987c",
+  "reload_verification": {
+    "ut": 41981.69550743058,
+    "parts": 55,
+    "periapsis_m": 15241.7256235042,
+    "apoapsis_m": 25232.187009467714,
+    "paused": true,
+    "next_orbit": null
+  },
+  "integration_limits": {
+    "wet_braking_stage_separation": "Unit-tested; real deorbit and separation require the full landing experiment in overall plan point 5",
+    "corrected_capture_flight_regression": "Still pending; iteration 6 of point 4 must repeat the actual capture, not just these node burns"
+  }
+}

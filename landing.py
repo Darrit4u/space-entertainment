@@ -326,13 +326,16 @@ def brake_to_descent(conn, vessel, recorder, timeout, *, checkpoint=True):
                 phase_started = now
                 recorder.log(phase="main_braking", event="burn_start")
         else:
-            if phase == "braking" and vessel.available_thrust <= 0:
-                # Terrier cannot draw from the four module tanks in this craft.
+            slow_for_handoff = horizontal <= 5 and -20 <= vertical <= 0
+            if phase == "braking" and (vessel.available_thrust <= 0 or slow_for_handoff):
+                # Discard the braking stage once it is empty OR its job is done.
+                # Extra arrival propellant must not prevent module separation.
+                empty = vessel.available_thrust <= 0
                 ctrl.throttle = 0.0
                 time.sleep(0.2)  # KSP applies control inputs on a physics update.
-                if ctrl.throttle != 0:
+                if ctrl.throttle != 0 or vessel.thrust > 1:
                     raise RuntimeError("Zero throttle was not applied before separation")
-                recorder.log(event="braking_stage_empty")
+                recorder.log(event="braking_stage_empty" if empty else "braking_stage_cutoff_for_separation")
                 control_part = vessel.parts.controlling
                 vessel.parts.decouplers[0].decouple()
                 vessel = control_part.vessel

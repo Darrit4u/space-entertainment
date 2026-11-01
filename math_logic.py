@@ -192,3 +192,12 @@ class OrbitalMath:
         target_speed = math.sqrt(mu*(2/periapsis_radius-2/(periapsis_radius+target_apoapsis_radius)))
         return arrival_speed-target_speed
 
+    @staticmethod
+    def apsis_change_delta_v(mu, burn_radius, opposite_radius_before, opposite_radius_after):
+        """Signed tangential impulse at an apsis, preserving that apsis radius."""
+        if not all(math.isfinite(x) and x > 0 for x in (mu,burn_radius,opposite_radius_before,opposite_radius_after)):
+            raise ValueError("Apsis radii and mu must be finite and positive")
+        before = math.sqrt(mu*(2/burn_radius-2/(burn_radius+opposite_radius_before)))
+        after = math.sqrt(mu*(2/burn_radius-2/(burn_radius+opposite_radius_after)))
+        return after-before
+

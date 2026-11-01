@@ -119,10 +119,10 @@ def find_transfer(conn, vessel, timeout=120):
             node.remove()
 
 
-def fly_node(conn, vessel, node, recorder, deadline):
+def fly_node(conn, vessel, node, recorder, deadline, *, body=None, prefix='transfer'):
     """Align, wait with coast-only warp, then close the actual burn-vector error."""
     sc, ctrl, ap = conn.space_center, vessel.control, vessel.auto_pilot
-    body = sc.bodies['Kerbin']
+    body = sc.bodies['Kerbin'] if body is None else body
     rf = body.non_rotating_reference_frame
     tank = next(p for p in vessel.parts.all if p.name == 'fuelTank')
     duration, _ = OrbitalMath.burn_duration(node.delta_v, vessel.mass, vessel.available_thrust, 345, max(0, tank.mass-tank.dry_mass-433))
@@ -139,7 +139,7 @@ def fly_node(conn, vessel, node, recorder, deadline):
     burning = False
     initial_remaining = node.delta_v
     conn.krpc.paused = False
-    recorder.log(phase='transfer_wait', event='node_alignment_start')
+    recorder.log(phase=prefix+'_wait', event='node_alignment_start')
     while True:
         now = time.monotonic()
         if now > deadline:
@@ -169,7 +169,7 @@ def fly_node(conn, vessel, node, recorder, deadline):
             time.sleep(.2)
             if ctrl.throttle != 0 or vessel.thrust > 1:
                 raise RuntimeError('Thrust did not stop after the maneuver')
-            recorder.log(event='transfer_burn_complete')
+            recorder.log(event=prefix+'_burn_complete')
             return
         direction = vector/max(remaining, 1e-12)
         ap.target_direction = tuple(direction)
@@ -190,10 +190,10 @@ def fly_node(conn, vessel, node, recorder, deadline):
                     raise RuntimeError('Burn window missed before alignment')
                 if alignment >= math.cos(math.radians(1)):
                     burning = True
-                    recorder.log(phase='transfer_burn', event='burn_start')
+                    recorder.log(phase=prefix+'_burn', event='burn_start')
             ctrl.throttle = min(1, max(.005, remaining/(vessel.available_thrust/vessel.mass))) if burning and alignment >= math.cos(math.radians(3)) else 0
         if now-last_print > 10:
-            print(f'transfer: lead {lead:.1f} s, remaining {remaining:.3f} m/s, alignment {recorder.attitude_error_deg:.2f} deg', flush=True)
+            print(f'{prefix}: lead {lead:.1f} s, remaining {remaining:.3f} m/s, alignment {recorder.attitude_error_deg:.2f} deg', flush=True)
             last_print = now
         time.sleep(.05)
 

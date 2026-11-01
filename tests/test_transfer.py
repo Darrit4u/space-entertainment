@@ -4,7 +4,7 @@ from types import SimpleNamespace
 from unittest.mock import MagicMock, PropertyMock, patch
 
 from math_logic import OrbitalMath
-from transfer import execute_transfer
+from transfer import execute_transfer, fly_node
 
 
 class LambertTests(unittest.TestCase):
@@ -85,6 +85,20 @@ class TransferControlTests(unittest.TestCase):
                 execute_transfer(self.conn,self.vessel,self.plan)
         self.assertTrue(self.conn.krpc.paused)
         self.log.log.assert_any_call(event='transfer_interrupted')
+
+    def test_mun_maneuver_uses_the_overridden_inertial_frame(self):
+        mun=SimpleNamespace(non_rotating_reference_frame='mun_inertial')
+        self.vessel.orbit.body=mun
+        type(self.sc).ut=PropertyMock(side_effect=[0,0,200])
+        def direction(frame):
+            self.assertEqual(frame,'mun_inertial')
+            return (-1,0,0)
+        self.vessel.direction=direction
+        with patch('transfer.time.sleep',side_effect=KeyboardInterrupt):
+            with self.assertRaises(KeyboardInterrupt):
+                fly_node(self.conn,self.vessel,self.node,self.log,math.inf,body=mun,prefix='lower_periapsis')
+        self.assertEqual(self.vessel.auto_pilot.reference_frame,'mun_inertial')
+        self.node.remaining_burn_vector.assert_called_with('mun_inertial')
 
 
 if __name__ == '__main__':

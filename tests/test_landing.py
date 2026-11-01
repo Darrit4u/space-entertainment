@@ -1,4 +1,5 @@
 import itertools
+import math
 from pathlib import Path
 import tempfile
 from types import SimpleNamespace
@@ -252,6 +253,47 @@ class LandingPreparationTests(unittest.TestCase):
         self.assertEqual(self.ctrl.throttle, 0)
         self.assertTrue(self.conn.krpc.paused)
         self.ap.disengage.assert_called_once()
+
+    def test_fueled_braking_stage_is_separated_after_braking_but_not_under_thrust(self):
+        original_engines=list(self.vessel.parts.engines)
+        self.body.reference_frame='surface'
+        self.body.non_rotating_reference_frame='inertial'
+        self.body.gravitational_parameter=6.513839752e10
+        self.body.equatorial_radius=200000
+        self.vessel.orbit.radius=224000
+        self.vessel.orbit.periapsis_altitude=-5001
+        self.vessel.vacuum_specific_impulse=345
+        self.vessel.velocity=lambda frame:(0,500,0)
+        self.vessel.flight=lambda frame:SimpleNamespace(surface_altitude=8000,horizontal_speed=4,vertical_speed=-5,speed=math.sqrt(41))
+        self.vessel.parts.controlling=SimpleNamespace(vessel=self.vessel)
+        tanks=list(self.vessel.parts.all)
+        for residual_thrust in (0,10):
+            with self.subTest(residual_thrust=residual_thrust):
+                self.vessel.mass,self.vessel.dry_mass=3300,2213
+                self.vessel.available_thrust,self.vessel.thrust=60000,residual_thrust
+                self.vessel.parts.engines=list(original_engines)
+                for engine in original_engines:
+                    engine.active=engine.part.name=='liquidEngine3.v2'
+                self.vessel.parts.all=tanks+[SimpleNamespace(name='other') for _ in range(51)]
+                decoupler=MagicMock()
+                def separate():
+                    self.vessel.parts.engines=original_engines[1:]
+                    self.vessel.parts.all=self.vessel.parts.all[:-4]
+                    self.vessel.mass,self.vessel.dry_mass=1793,1353
+                    self.vessel.available_thrust=32000
+                decoupler.decouple.side_effect=separate
+                self.vessel.parts.decouplers=[decoupler]
+                self.conn.krpc.paused=False
+                with patch('landing.time.sleep'):
+                    if residual_thrust:
+                        with self.assertRaisesRegex(RuntimeError,'before separation'):
+                            brake_to_descent(self.conn,self.vessel,self.log,30,checkpoint=False)
+                        decoupler.decouple.assert_not_called()
+                    else:
+                        self.assertEqual(brake_to_descent(self.conn,self.vessel,self.log,30,checkpoint=False),'ready_for_vertical_descent')
+                        self.assertEqual(len(self.vessel.parts.all),51)
+                        self.assertTrue(all(e.active for e in self.vessel.parts.engines))
+                        self.log.log.assert_any_call(event='braking_stage_cutoff_for_separation')
 
     def test_descent_rejects_intact_configuration(self):
         self.body.reference_frame = "surface"
