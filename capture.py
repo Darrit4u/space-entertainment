@@ -123,7 +123,12 @@ def execute_capture(conn, vessel, timeout=900):
                         wanted = 5 if lead > 3000 else (4 if lead > 180 else (2 if lead > 60 else 0))
                         sc.rails_warp_factor = min(wanted, sc.maximum_rails_warp_factor)
                     else:
-                        sc.rails_warp_factor = sc.physics_warp_factor = 0
+                        # kRPC resets throttle on EVERY RailsWarpFactor write,
+                        # including writing zero when warp is already off.
+                        if sc.rails_warp_factor != 0:
+                            sc.rails_warp_factor = 0
+                        if sc.physics_warp_factor != 0:
+                            sc.physics_warp_factor = 0
                         if phase == 'approach':
                             if lead < -10:
                                 raise RuntimeError('Capture burn window missed before alignment')

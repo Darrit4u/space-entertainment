@@ -90,5 +90,17 @@
     "apoapsis_m": 100256.61967293738,
     "paused": true,
     "next_orbit": null
+  },
+  "post_trial_fix": {
+    "flight_tested_commit": "d3cb9a0",
+    "corrected_source_sha256_lf": {
+      "capture.py": "f2979778a2f14444d7b6f914f8e63e2848ee023ff833271f5721a5dee78955a3",
+      "transfer.py": "4ae2d387172f1cfaaac7a11001347183b77a4bb78e79089c5113838b92a73eb0"
+    },
+    "unit_tests_passed": 67,
+    "regression_assertions_fail_on_old_controllers": true,
+    "flight_regression_completed": false,
+    "reason_no_additional_flight": "Two-flight limit for iteration 4 exhausted",
+    "upstream_behavior_source": "https://github.com/krpc/krpc/blob/v0.5.4/service/SpaceCenter/src/Services/SpaceCenter.cs#L609-L615"
   }
 }

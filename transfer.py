@@ -180,7 +180,11 @@ def fly_node(conn, vessel, node, recorder, deadline):
             ctrl.throttle = 0
             sc.rails_warp_factor = 4 if lead > 180 else (2 if lead > 60 else 0)
         else:
-            sc.rails_warp_factor = sc.physics_warp_factor = 0
+            # Rewriting RailsWarpFactor=0 also cuts throttle in kRPC 0.5.4.
+            if sc.rails_warp_factor != 0:
+                sc.rails_warp_factor = 0
+            if sc.physics_warp_factor != 0:
+                sc.physics_warp_factor = 0
             if not burning:
                 if lead < -10:
                     raise RuntimeError('Burn window missed before alignment')

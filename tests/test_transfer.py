@@ -73,8 +73,11 @@ class TransferControlTests(unittest.TestCase):
 
     def test_wrong_thrust_direction_keeps_throttle_zero(self):
         type(self.sc).ut = PropertyMock(side_effect=[0,0,200])
+        warp = PropertyMock(return_value=0)
+        type(self.sc).rails_warp_factor = warp
         def sleep(seconds):
             if seconds==.05:
+                self.assertFalse(any(call.args for call in warp.mock_calls))
                 self.assertEqual(self.ctrl.throttle,0)
                 raise KeyboardInterrupt
         with patch('transfer.encounter',return_value={'periapsis_altitude_m':50000}), patch('transfer.time.sleep',side_effect=sleep):

@@ -105,12 +105,18 @@ class CaptureControlTests(unittest.TestCase):
 
     def test_success_requires_actual_mun_entry_and_30_second_unpowered_verification(self):
         target_energy = -self.mun.gravitational_parameter/(self.orbit.periapsis+300000)
+        warp = PropertyMock(return_value=0)
+        type(self.sc).rails_warp_factor = warp
+        writes_at_burn_start = []
         def event(**kwargs):
             if kwargs.get('event') == 'capture_coast_start':
                 self.orbit.body = self.mun
             if kwargs.get('event') == 'capture_burn_start':
+                writes_at_burn_start.append(sum(bool(call.args) for call in warp.mock_calls))
                 self.speed = math.sqrt(2*(target_energy+self.mun.gravitational_parameter/self.orbit.radius))
                 self.orbit.eccentricity = (300000-self.orbit.periapsis)/(300000+self.orbit.periapsis)
+            if kwargs.get('event') == 'capture_burn_complete':
+                self.assertEqual(sum(bool(call.args) for call in warp.mock_calls),writes_at_burn_start[0])
             return {'speed':self.speed,'radius':self.orbit.radius,'body':'Mun'}
         self.log.log.side_effect = event
         with patch('capture.time.sleep'):
