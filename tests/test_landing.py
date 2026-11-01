@@ -5,7 +5,7 @@ from types import SimpleNamespace
 import unittest
 from unittest.mock import MagicMock, PropertyMock, patch
 
-from landing import brake_to_descent, descent_acceleration, descend_to_low_altitude, run_landing
+from landing import brake_to_descent, descent_acceleration, descend_to_low_altitude, finish_touchdown, run_landing
 
 
 class LandingPreparationTests(unittest.TestCase):
@@ -256,6 +256,122 @@ class LandingPreparationTests(unittest.TestCase):
         with self.assertRaisesRegex(RuntimeError, "emergency altitude"):
             descend_to_low_altitude(self.conn, self.vessel, self.log, 30)
         self.assertEqual(self.ctrl.throttle, 0)
+
+    def test_touchdown_mode_accepts_low_detached_module_and_restores_tuning(self):
+        self.body.reference_frame = "surface"
+        self.vessel.situation.name = "sub_orbital"
+        self.vessel.parts.engines = self.vessel.parts.engines[1:]
+        for engine in self.vessel.parts.engines:
+            engine.active = True
+        self.vessel.parts.decouplers = []
+        self.vessel.parts.all += [SimpleNamespace(name="sGripPad") for _ in range(4)]
+        self.vessel.flight = lambda frame: SimpleNamespace(surface_altitude=38, horizontal_speed=.05, vertical_speed=-1.76)
+        self.ap.time_to_peak = (3, 3, 3)
+        with patch("landing.finish_touchdown", return_value="landed"), patch("landing.time.sleep"):
+            self.assertEqual(run_landing(self.conn, touchdown=True), "landed")
+        self.assertEqual(self.ctrl.throttle, 0)
+        self.assertTrue(self.conn.krpc.paused)
+        self.assertEqual(self.ap.time_to_peak, (3, 3, 3))
+
+
+class TouchdownVerificationTests(unittest.TestCase):
+    def setUp(self):
+        self.directory = tempfile.TemporaryDirectory(prefix="touchdown-test-", dir=Path(__file__).parent)
+        self.addCleanup(self.directory.cleanup)
+        self.body = SimpleNamespace(reference_frame="body", gravitational_parameter=6.513839752e10)
+        self.flight = SimpleNamespace(surface_altitude=3.9, vertical_speed=-.2)
+        self.ctrl = SimpleNamespace(throttle=0)
+        self.ap = MagicMock()
+        self.vessel = SimpleNamespace(
+            control=self.ctrl, auto_pilot=self.ap, surface_reference_frame="surface",
+            reference_frame="vessel", situation=SimpleNamespace(name="sub_orbital"),
+            orbit=SimpleNamespace(body=self.body, radius=202600),
+            parts=SimpleNamespace(all=[object() for _ in range(51)]),
+            thrust=0, mass=1567, dry_mass=1353, available_thrust=32000,
+            flight=lambda frame:self.flight,
+            velocity=lambda frame:(-.2, 0, 0),
+            angular_velocity=lambda frame:(0, 0, 0),
+        )
+        self.sc = MagicMock()
+        self.sc.bodies = {"Mun":self.body}
+        self.sc.active_vessel = self.vessel
+        type(self.sc).ut = PropertyMock(side_effect=itertools.count(100, .1))
+        self.conn = SimpleNamespace(space_center=self.sc, krpc=SimpleNamespace(paused=False))
+        self.log = MagicMock()
+        self.log.error = None
+        self.log.filename = Path(self.directory.name) / "flight.csv"
+        self.pad_up = -1
+        self.sc.transform_direction.side_effect = lambda vector, source, target: (self.pad_up,0,0) if source=="vessel" else ((0,0,0) if self.vessel.situation.name=="landed" else (-.2,0,0))
+
+        def event(**kwargs):
+            if kwargs.get("event")=="contact_detected":
+                # Keep reaction-wheel damping through the first contact.
+                self.ap.disengage.assert_not_called()
+            if kwargs.get("event")=="engines_off_for_turn":
+                self.vessel.situation.name="landed"
+                self.flight.surface_altitude=.9
+                self.flight.vertical_speed=0
+            return {"event":kwargs.get("event")}
+
+        self.log.log.side_effect = event
+        self.print_patch = patch("builtins.print")
+        self.print_patch.start()
+        self.addCleanup(self.print_patch.stop)
+
+    def test_contact_requires_settling_and_preserves_all_parts(self):
+        with patch("landing.time.sleep"):
+            self.assertEqual(finish_touchdown(self.conn,self.vessel,self.log,30),"landed")
+        self.assertEqual(len(self.vessel.parts.all),51)
+        self.assertTrue(self.conn.krpc.paused)
+        self.sc.save.assert_called_once()
+        self.ap.disengage.assert_called_once()
+        self.assertFalse(self.ctrl.sas)
+        self.assertEqual(self.ap.time_to_peak, (1, 1, 1))
+        self.assertTrue(self.log.filename.with_suffix(".touchdown.json").exists())
+        self.log.log.assert_any_call(phase="landed",event="touchdown_confirmed")
+        self.log.log.assert_any_call(phase="touchdown_passive",event="attitude_control_released")
+
+    def test_instability_after_control_release_is_not_accepted(self):
+        original_event = self.log.log.side_effect
+
+        def event(**kwargs):
+            if kwargs.get("event") == "attitude_control_released":
+                self.pad_up = 1
+            return original_event(**kwargs)
+
+        self.log.log.side_effect = event
+        with patch("landing.time.sleep"), patch("landing.time.monotonic", side_effect=itertools.count(0, .01)):
+            with self.assertRaises(TimeoutError):
+                finish_touchdown(self.conn, self.vessel, self.log, 2)
+        self.ap.disengage.assert_called_once()
+        self.sc.save.assert_not_called()
+
+    def test_wrong_contact_side_is_not_accepted_as_landing(self):
+        self.pad_up=1
+        with patch("landing.time.sleep"),patch("landing.time.monotonic",side_effect=[0,.1,.2,10]):
+            with self.assertRaises(TimeoutError):
+                finish_touchdown(self.conn,self.vessel,self.log,2)
+        self.sc.save.assert_not_called()
+
+    def test_uncertain_contact_speed_is_not_accepted(self):
+        # A long gap before detecting contact makes the speed bound too large.
+        type(self.sc).ut = PropertyMock(side_effect=itertools.count(100, 4))
+        with patch("landing.time.sleep"):
+            with self.assertRaisesRegex(RuntimeError, "Contact speed exceeded"):
+                finish_touchdown(self.conn, self.vessel, self.log, 30)
+        self.sc.save.assert_not_called()
+
+    def test_lost_part_is_rejected(self):
+        self.log.log.side_effect=lambda **kwargs:self.vessel.parts.all.pop()
+        with self.assertRaisesRegex(RuntimeError,"part was lost"):
+            finish_touchdown(self.conn,self.vessel,self.log,30)
+        self.sc.save.assert_not_called()
+
+    def test_premature_contact_is_rejected(self):
+        self.vessel.situation.name="landed"
+        with self.assertRaisesRegex(RuntimeError,"Unexpected contact"):
+            finish_touchdown(self.conn,self.vessel,self.log,30)
+        self.sc.save.assert_not_called()
 
 
 class DescentControlTests(unittest.TestCase):

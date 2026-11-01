@@ -1,0 +1,231 @@
+{
+  "trials": [
+    {
+      "trial": 1,
+      "baseline": "SLIM_Touchdown_Ready_v1",
+      "error": "TimeoutError('Touchdown exceeded its wall-clock timeout')",
+      "final": {
+        "situation": "landed",
+        "mass_kg": 1527.73876953125,
+        "dry_mass_kg": 1353.0,
+        "parts": 51,
+        "altitude_m": 0.9885571614431683,
+        "horizontal_speed_m_s": 1.039155028545394,
+        "vertical_speed_m_s": -0.21480605962105048,
+        "throttle": 0.0,
+        "thrust_N": 0.0,
+        "paused": true,
+        "pad_up_component": -0.9572585252218991
+      },
+      "log": "logs/flight_20261101T144243_410510Z.csv",
+      "rows": 550,
+      "events": [
+        {
+          "t": "0.0",
+          "phase": "initial",
+          "event": "run_start",
+          "altitude": "38.25190120653133",
+          "horizontal_speed": "0.05396306675514029",
+          "vertical_speed": "-1.76107144742849",
+          "mass": "1567.573486328125",
+          "pad_up_component": "",
+          "angular_speed": ""
+        },
+        {
+          "t": "0.01999999999679858",
+          "phase": "landing_preflight",
+          "event": "check_start",
+          "altitude": "38.25190120653133",
+          "horizontal_speed": "0.05396306675514029",
+          "vertical_speed": "-1.76107144742849",
+          "mass": "1567.573486328125",
+          "pad_up_component": "",
+          "angular_speed": ""
+        },
+        {
+          "t": "0.059999999990395736",
+          "phase": "landing_preflight",
+          "event": "preflight_passed",
+          "altitude": "38.179774162970716",
+          "horizontal_speed": "0.05396201626829847",
+          "vertical_speed": "-1.824509101288009",
+          "mass": "1567.573486328125",
+          "pad_up_component": "",
+          "angular_speed": ""
+        },
+        {
+          "t": "0.07999999998719431",
+          "phase": "final_approach",
+          "event": "final_approach_start",
+          "altitude": "38.14275473562884",
+          "horizontal_speed": "0.05396142885775645",
+          "vertical_speed": "-1.8562279748708703",
+          "mass": "1567.573486328125",
+          "pad_up_component": "",
+          "angular_speed": ""
+        },
+        {
+          "t": "43.51999999303371",
+          "phase": "final_turn",
+          "event": "engines_off_for_turn",
+          "altitude": "3.9782476351829246",
+          "horizontal_speed": "0.09843632717438681",
+          "vertical_speed": "-0.2769962775252985",
+          "mass": "1527.73876953125",
+          "pad_up_component": "-0.0909397786687095",
+          "angular_speed": "1.106798457853779"
+        },
+        {
+          "t": "45.25999999275518",
+          "phase": "touchdown_settling",
+          "event": "contact_detected",
+          "altitude": "1.2148462090699468",
+          "horizontal_speed": "0.4279616226227308",
+          "vertical_speed": "0.13448210310883674",
+          "mass": "1527.73876953125",
+          "pad_up_component": "-0.8455296445340255",
+          "angular_speed": "0.8240164513557762"
+        },
+        {
+          "t": "120.09999998077546",
+          "phase": "touchdown_settling",
+          "event": "landing_error",
+          "altitude": "0.9592034443921875",
+          "horizontal_speed": "1.090980937668653",
+          "vertical_speed": "-0.16941659876602222",
+          "mass": "1527.73876953125",
+          "pad_up_component": "-0.8592397240621913",
+          "angular_speed": "0.8487693309992375"
+        }
+      ],
+      "settling_statistics": {
+        "samples": 341,
+        "pad_up_min": -0.9981309665960147,
+        "pad_up_max": 0.9996015018089547,
+        "vertical_speed_min_m_s": -0.9118301994020076,
+        "vertical_speed_max_m_s": 0.43781905544558786,
+        "longest_sampled_stable_interval_s": 0,
+        "note": "Statistics use 0.2 s wall-clock CSV samples, not every controller iteration"
+      }
+    },
+    {
+      "trial": 2,
+      "baseline": "SLIM_Touchdown_Ready_v1",
+      "change": "Keep autopilot reaction-wheel damping through contact and settling",
+      "error": "TimeoutError('Touchdown exceeded its wall-clock timeout')",
+      "final": {
+        "situation": "landed",
+        "mass_kg": 1518.9019775390625,
+        "dry_mass_kg": 1353.0,
+        "parts": 51,
+        "altitude_m": 0.9514448722766247,
+        "horizontal_speed_m_s": 0.2444888209332665,
+        "vertical_speed_m_s": -0.14469761471064646,
+        "throttle": 0.0,
+        "thrust_N": 0.0,
+        "paused": true,
+        "pad_up_component": -0.9989156089707834
+      },
+      "log": "logs/flight_20261101T144643_745313Z.csv",
+      "rows": 543,
+      "events": [
+        {
+          "t": "0.0",
+          "phase": "initial",
+          "event": "run_start",
+          "altitude": "33.45464480979717",
+          "horizontal_speed": "0.05385024748355966",
+          "vertical_speed": "-4.266908594433062",
+          "mass": "1567.573486328125",
+          "pad_up_component": "",
+          "angular_speed": ""
+        },
+        {
+          "t": "0.01999999999679858",
+          "phase": "landing_preflight",
+          "event": "check_start",
+          "altitude": "33.45464480979717",
+          "horizontal_speed": "0.05385024748355966",
+          "vertical_speed": "-4.266908594433062",
+          "mass": "1567.573486328125",
+          "pad_up_component": "",
+          "angular_speed": ""
+        },
+        {
+          "t": "0.059999999990395736",
+          "phase": "landing_preflight",
+          "event": "preflight_passed",
+          "altitude": "33.28290335490601",
+          "horizontal_speed": "0.05384543058867884",
+          "vertical_speed": "-4.330349404195105",
+          "mass": "1567.573486328125",
+          "pad_up_component": "",
+          "angular_speed": ""
+        },
+        {
+          "t": "0.07999999998719431",
+          "phase": "final_approach",
+          "event": "final_approach_start",
+          "altitude": "33.19607689214172",
+          "horizontal_speed": "0.05384302536620777",
+          "vertical_speed": "-4.36206979754388",
+          "mass": "1567.573486328125",
+          "pad_up_component": "",
+          "angular_speed": ""
+        },
+        {
+          "t": "50.639999991894",
+          "phase": "final_turn",
+          "event": "engines_off_for_turn",
+          "altitude": "3.9893917614535894",
+          "horizontal_speed": "0.16797273725669012",
+          "vertical_speed": "-0.15363038018446523",
+          "mass": "1518.9019775390625",
+          "pad_up_component": "-0.1386033851428512",
+          "angular_speed": "0.3822762007707448"
+        },
+        {
+          "t": "52.49999999159627",
+          "phase": "touchdown_settling",
+          "event": "contact_detected",
+          "altitude": "0.9113975430955179",
+          "horizontal_speed": "0.33870539465955374",
+          "vertical_speed": "-0.9498195604108087",
+          "mass": "1518.9019775390625",
+          "pad_up_component": "-0.9231848996818189",
+          "angular_speed": "0.619136975120756"
+        },
+        {
+          "t": "120.09999998077546",
+          "phase": "touchdown_settling",
+          "event": "landing_error",
+          "altitude": "1.0058573664573487",
+          "horizontal_speed": "0.23873135720403835",
+          "vertical_speed": "-0.12698543827682168",
+          "mass": "1518.9019775390625",
+          "pad_up_component": "-0.9996108994948367",
+          "angular_speed": "0.7942370255106642"
+        }
+      ],
+      "settling_statistics": {
+        "samples": 307,
+        "pad_up_min": -0.9999975213747767,
+        "pad_up_max": -0.9231848996818189,
+        "vertical_speed_min_m_s": -0.9498195604108087,
+        "vertical_speed_max_m_s": 0.5948652361741247,
+        "longest_sampled_stable_interval_s": 0,
+        "note": "Statistics use 0.2 s wall-clock CSV samples, not every controller iteration"
+      },
+      "debug_save": "SLIM_Touchdown_Debug_20261101T144913Z"
+    }
+  ],
+  "status": "incomplete: stable touchdown not confirmed within two flight trials",
+  "restored_checkpoint": {
+    "name": "SLIM_Touchdown_Ready_v1",
+    "parts": 51,
+    "mass_kg": 1567.573486328125,
+    "paused": true,
+    "throttle": 0.0,
+    "thrust_N": 0.0
+  }
+}
