@@ -26,6 +26,9 @@ class FlightLogger:
         self.delta_v = 0.0
         self.phase = "initial"
         self.target_vertical_speed = None
+        self.attitude_error_deg = None
+        self.thrust_up_component = None
+        self.commanded_up_acceleration = None
         self.error = None
         self._stop = threading.Event()
         self._lock = threading.Lock()
@@ -38,6 +41,7 @@ class FlightLogger:
             "target_vertical_speed", "mass", "dry_mass", "throttle", "thrust",
             "available_thrust", "specific_impulse", "liquid_fuel", "oxidizer",
             "electric_charge", "apoapsis", "periapsis", "delta_v", "sample_dt",
+            "attitude_error_deg", "thrust_up_component", "commanded_up_acceleration",
         ]
         self.writer = csv.DictWriter(self.file, fieldnames=fields)
         self.writer.writeheader()
@@ -132,6 +136,9 @@ class FlightLogger:
                 "electric_charge": resources.amount("ElectricCharge"),
                 "apoapsis": orbit.apoapsis_altitude, "periapsis": orbit.periapsis_altitude,
                 "delta_v": delta_v, "sample_dt": dt,
+                "attitude_error_deg": self.attitude_error_deg,
+                "thrust_up_component": self.thrust_up_component,
+                "commanded_up_acceleration": self.commanded_up_acceleration,
             }
             self.writer.writerow(row)
             self.file.flush()

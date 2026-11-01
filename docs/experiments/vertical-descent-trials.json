@@ -1,0 +1,214 @@
+{
+  "trials": [
+    {
+      "trial": 1,
+      "baseline": "SLIM_Descent_Ready_v1",
+      "error": "RuntimeError('Telemetry recording failed; the CSV is incomplete')",
+      "final": {
+        "mass_kg": 0.0,
+        "dry_mass_kg": 0.0,
+        "parts": 0,
+        "altitude_m": -0.3435354096291121,
+        "horizontal_speed_m_s": 0.7348894030373994,
+        "vertical_speed_m_s": -96.0418798602634,
+        "throttle": 0.0,
+        "thrust_N": 0.0,
+        "paused": true
+      },
+      "log": "logs/flight_20261101T140402_649657Z.csv",
+      "rows": 500,
+      "events": [
+        {
+          "t": "0.0",
+          "phase": "initial",
+          "event": "run_start",
+          "altitude": "6067.180865366827",
+          "horizontal_speed": "4.913075023560548",
+          "vertical_speed": "-6.657516503552797",
+          "mass": "1759.27490234375",
+          "delta_v": "0.0"
+        },
+        {
+          "t": "0.01999999999679858",
+          "phase": "landing_preflight",
+          "event": "check_start",
+          "altitude": "6067.180865366827",
+          "horizontal_speed": "4.913075023560548",
+          "vertical_speed": "-6.657516503552797",
+          "mass": "1759.27490234375",
+          "delta_v": "0.0"
+        },
+        {
+          "t": "0.059999999990395736",
+          "phase": "landing_preflight",
+          "event": "preflight_passed",
+          "altitude": "6066.878241213912",
+          "horizontal_speed": "4.913105414446693",
+          "vertical_speed": "-6.717339388405787",
+          "mass": "1759.27490234375",
+          "delta_v": "0.0"
+        },
+        {
+          "t": "0.059999999990395736",
+          "phase": "vertical_descent",
+          "event": "descent_start",
+          "altitude": "6066.878241213912",
+          "horizontal_speed": "4.913120707643228",
+          "vertical_speed": "-6.717339388405787",
+          "mass": "1759.27490234375",
+          "delta_v": "0.0"
+        },
+        {
+          "t": "109.6599999824466",
+          "phase": "vertical_descent",
+          "event": "landing_error",
+          "altitude": "15.216035664256196",
+          "horizontal_speed": "0.7343643192401055",
+          "vertical_speed": "-95.78807851742428",
+          "mass": "1710.783447265625",
+          "delta_v": "76.7906878891427"
+        }
+      ],
+      "max_downward_speed_m_s": -95.78807851742428,
+      "max_upward_speed_m_s": -6.657516503552797,
+      "diagnosis": "Prolonged throttle cuts using AutoPilot error gating; excessive descent speed and impact. Checkpoint restored before trial 2. Added actual thrust projection control and earlier emergency abort."
+    },
+    {
+      "trial": 2,
+      "baseline": "SLIM_Descent_Ready_v1",
+      "change": "Use actual vertical thrust projection instead of AutoPilot heading-error gating; add speed-dependent emergency altitude.",
+      "outcome": "ready_for_touchdown",
+      "final": {
+        "mass_kg": 1567.573486328125,
+        "dry_mass_kg": 1353.0,
+        "parts": 51,
+        "altitude_m": 38.25190120653133,
+        "horizontal_speed_m_s": 0.05396306675514029,
+        "vertical_speed_m_s": -1.76107144742849,
+        "throttle": 0.0,
+        "thrust_N": 0.0,
+        "paused": true
+      },
+      "log": "logs/flight_20261101T141020_228933Z.csv",
+      "rows": 871,
+      "events": [
+        {
+          "t": "0.0",
+          "phase": "initial",
+          "event": "run_start",
+          "altitude": "6053.550462446234",
+          "horizontal_speed": "4.914461667431626",
+          "vertical_speed": "-8.99073570998346",
+          "mass": "1759.27490234375",
+          "delta_v": "0.0"
+        },
+        {
+          "t": "0.01999999999679858",
+          "phase": "landing_preflight",
+          "event": "check_start",
+          "altitude": "6053.550462446234",
+          "horizontal_speed": "4.914461667431626",
+          "vertical_speed": "-8.99073570998346",
+          "mass": "1759.27490234375",
+          "delta_v": "0.0"
+        },
+        {
+          "t": "0.03999999999359716",
+          "phase": "landing_preflight",
+          "event": "preflight_passed",
+          "altitude": "6053.350754828163",
+          "horizontal_speed": "4.91448211392914",
+          "vertical_speed": "-9.020650645252207",
+          "mass": "1759.27490234375",
+          "delta_v": "0.0"
+        },
+        {
+          "t": "0.059999999990395736",
+          "phase": "vertical_descent",
+          "event": "descent_start",
+          "altitude": "6053.153488582233",
+          "horizontal_speed": "4.914502628531225",
+          "vertical_speed": "-9.050565633000623",
+          "mass": "1759.27490234375",
+          "delta_v": "0.0"
+        },
+        {
+          "t": "191.79999996929837",
+          "phase": "touchdown_handoff",
+          "event": "vertical_descent_complete",
+          "altitude": "38.28700726668467",
+          "horizontal_speed": "0.05396306675514029",
+          "vertical_speed": "-1.76107144742849",
+          "mass": "1567.573486328125",
+          "delta_v": "328.4020170029384"
+        }
+      ],
+      "max_downward_speed_m_s": -52.103362384566594,
+      "max_upward_speed_m_s": -1.4948332277416696,
+      "handoff": {
+        "save": "SLIM_Touchdown_Ready_20261101T141332_104807Z",
+        "telemetry": "C:\\Users\\Asus\\education\\5_sem\\space-entertainment\\logs\\flight_20261101T141020_228933Z.csv",
+        "handoff": {
+          "t": 191.79999996929837,
+          "ut": 64105.62454278465,
+          "phase": "touchdown_handoff",
+          "event": "vertical_descent_complete",
+          "body": "Mun",
+          "situation": "sub_orbital",
+          "altitude": 38.28700726668467,
+          "mean_altitude": 2637.334778005752,
+          "radius": 202637.3347766991,
+          "latitude": -6.631877580229653,
+          "longitude": 55.60032002030098,
+          "speed": 9.239690833916177,
+          "surface_speed": 1.7301944841474701,
+          "vertical_speed": -1.76107144742849,
+          "horizontal_speed": 0.05396306675514029,
+          "target_vertical_speed": -1.0,
+          "mass": 1567.573486328125,
+          "dry_mass": 1353.0,
+          "throttle": 0.0,
+          "thrust": 0.0,
+          "available_thrust": 32000.0,
+          "specific_impulse": 290.0,
+          "liquid_fuel": 19.311616897583008,
+          "oxidizer": 23.603086471557617,
+          "electric_charge": 1000.0,
+          "apoapsis": 2638.2776475801656,
+          "periapsis": -199974.03096740344,
+          "delta_v": 328.4020170029384,
+          "sample_dt": 0.01999999999679858,
+          "attitude_error_deg": 160.29222106933594,
+          "thrust_up_component": 0.9984508523315709,
+          "commanded_up_acceleration": 1.8414591684709753
+        }
+      },
+      "analysis": {
+        "max_downward_speed_m_s": -52.103362384566594,
+        "max_upward_speed_m_s": -1.4948332277416696,
+        "elapsed_ut_s": 191.7999999692984,
+        "measured_thrust_delta_v_m_s": 328.4020170029384,
+        "tracking_rms_error_50_to_3000_m_m_s": 1.1554019900893322,
+        "samples_with_high_AP_error_but_upward_thrust": 436,
+        "fuel_spent_kg": 191.701416015625
+      }
+    }
+  ],
+  "selected_checkpoint": {
+    "save": "SLIM_Touchdown_Ready_v1",
+    "ut": 64105.62454278465,
+    "situation": "sub_orbital",
+    "mass_kg": 1567.573486328125,
+    "dry_mass_kg": 1353.0,
+    "terrain_altitude_m": 38.25190120653133,
+    "mean_altitude_m": 2637.2998704182683,
+    "horizontal_speed_m_s": 0.05396306675514029,
+    "vertical_speed_m_s": -1.76107144742849,
+    "propellant_kg": 214.573486328125,
+    "ideal_remaining_delta_v_m_s": 418.63914246195986,
+    "parts": 51,
+    "throttle": 0.0,
+    "thrust_N": 0.0,
+    "paused": true
+  }
+}

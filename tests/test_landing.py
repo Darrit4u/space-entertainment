@@ -5,7 +5,7 @@ from types import SimpleNamespace
 import unittest
 from unittest.mock import MagicMock, PropertyMock, patch
 
-from landing import brake_to_descent, run_landing
+from landing import brake_to_descent, descent_acceleration, descend_to_low_altitude, run_landing
 
 
 class LandingPreparationTests(unittest.TestCase):
@@ -186,6 +186,103 @@ class LandingPreparationTests(unittest.TestCase):
         self.assertEqual(self.ctrl.throttle, 0)
         self.assertTrue(self.conn.krpc.paused)
         self.sc.save.assert_called_once()
+
+    def test_descent_mode_accepts_detached_module_and_cleans_up(self):
+        self.body.reference_frame = "surface"
+        self.vessel.situation.name = "sub_orbital"
+        self.vessel.parts.engines = self.vessel.parts.engines[1:]
+        for engine in self.vessel.parts.engines:
+            engine.active = True
+        self.vessel.parts.decouplers = []
+        self.vessel.flight = lambda frame: SimpleNamespace(surface_altitude=6000, horizontal_speed=5, vertical_speed=-7)
+        with patch("landing.descend_to_low_altitude", return_value="ready_for_touchdown") as descent, patch("landing.time.sleep"):
+            self.assertEqual(run_landing(self.conn, descend=True), "ready_for_touchdown")
+        descent.assert_called_once_with(self.conn, self.vessel, self.log, 600.0)
+        self.assertEqual(self.ctrl.throttle, 0)
+        self.assertTrue(self.conn.krpc.paused)
+        self.ap.disengage.assert_called_once()
+
+    def test_descent_rejects_intact_configuration(self):
+        self.body.reference_frame = "surface"
+        self.vessel.situation.name = "sub_orbital"
+        self.vessel.flight = lambda frame: SimpleNamespace(surface_altitude=6000, horizontal_speed=5, vertical_speed=-7)
+        with self.assertRaisesRegex(ValueError, "two active radial"):
+            run_landing(self.conn, descend=True)
+        self.ap.engage.assert_not_called()
+
+    def test_low_altitude_handoff_uses_rotated_body_velocity(self):
+        self.body.reference_frame = "body_surface"
+        self.body.gravitational_parameter = 6.513839752e10
+        self.vessel.orbit.radius = 200040
+        self.vessel.surface_reference_frame = "vessel_surface"
+        self.vessel.velocity = lambda frame: (-1, 0, 0) if frame == "body_surface" else (0, 0, 0)
+        self.vessel.flight = lambda frame: SimpleNamespace(surface_altitude=40, vertical_speed=-1)
+        self.sc.transform_direction.return_value = (-1, 0.01, 0)
+        self.log.log.return_value = {"altitude": 39.8, "vertical_speed": -1.3}
+        with tempfile.TemporaryDirectory(prefix="descent-test-", dir=Path(__file__).parent) as directory:
+            self.log.filename = Path(directory) / "flight.csv"
+            with patch("landing.time.sleep"):
+                self.assertEqual(descend_to_low_altitude(self.conn, self.vessel, self.log, 30), "ready_for_touchdown")
+            self.assertTrue(self.log.filename.with_suffix(".handoff.json").exists())
+        self.sc.transform_direction.assert_called_once_with((-1, 0, 0), "body_surface", "vessel_surface")
+        self.assertEqual(self.ctrl.throttle, 0)
+        self.assertTrue(self.conn.krpc.paused)
+
+    def test_vertical_thrust_is_not_cut_by_heading_error(self):
+        self.body.reference_frame = "body_surface"
+        self.body.gravitational_parameter = 6.513839752e10
+        self.vessel.orbit.radius = 201000
+        self.vessel.surface_reference_frame = "vessel_surface"
+        self.vessel.velocity = lambda frame: (-40, 0, 0)
+        self.vessel.direction = lambda frame: (1, 0, 0)
+        self.vessel.flight = lambda frame: SimpleNamespace(surface_altitude=1000, vertical_speed=-40)
+        self.vessel.dry_mass = 2213
+        self.sc.transform_direction.return_value = (-40, 0, 0)
+        self.ap.error = 180
+        with patch("landing.time.sleep", side_effect=KeyboardInterrupt):
+            with self.assertRaises(KeyboardInterrupt):
+                descend_to_low_altitude(self.conn, self.vessel, self.log, 30)
+        self.assertGreater(self.ctrl.throttle, 0)
+        self.assertEqual(self.log.thrust_up_component, 1)
+
+    def test_fast_descent_aborts_above_the_static_safety_floor(self):
+        self.body.reference_frame = "body_surface"
+        self.body.gravitational_parameter = 6.513839752e10
+        self.vessel.orbit.radius = 200100
+        self.vessel.surface_reference_frame = "vessel_surface"
+        self.vessel.velocity = lambda frame: (-60, 0, 0)
+        self.vessel.flight = lambda frame: SimpleNamespace(surface_altitude=100, vertical_speed=-60)
+        self.sc.transform_direction.return_value = (-60, 0, 0)
+        with self.assertRaisesRegex(RuntimeError, "emergency altitude"):
+            descend_to_low_altitude(self.conn, self.vessel, self.log, 30)
+        self.assertEqual(self.ctrl.throttle, 0)
+
+
+class DescentControlTests(unittest.TestCase):
+    def test_constant_descent_requires_gravity_compensation(self):
+        target, acceleration = descent_acceleration(40, (-1, 0, 0), 1.6, 0)
+        self.assertEqual(target, -1)
+        self.assertEqual(acceleration, (1.6, 0, 0))
+
+    def test_high_altitude_slow_descent_allows_freefall(self):
+        target, acceleration = descent_acceleration(6000, (-7, 2, 3), 1.6, 0)
+        self.assertEqual(target, -50)
+        self.assertEqual(acceleration, (0, 0, 0))
+
+    def test_overspeed_brakes_and_horizontal_force_opposes_motion(self):
+        import math
+        _, acceleration = descent_acceleration(1000, (-80, 80, -60), 1.6, 0)
+        self.assertGreater(acceleration[0], 1.6)
+        self.assertLess(acceleration[1], 0)
+        self.assertGreater(acceleration[2], 0)
+        self.assertLessEqual(math.hypot(*acceleration[1:]), 0.2 * acceleration[0] + 1e-10)
+
+    def test_profile_slows_and_derivative_damps_acceleration(self):
+        targets = [descent_acceleration(h, (-1, 0, 0), 1.6, 0)[0] for h in (6000, 1000, 100, 40)]
+        self.assertEqual(targets, sorted(targets))
+        _, rising = descent_acceleration(40, (-1, 0, 0), 1.6, 2)
+        _, falling = descent_acceleration(40, (-1, 0, 0), 1.6, -2)
+        self.assertLess(rising[0], falling[0])
 
 
 if __name__ == "__main__":
