@@ -1,0 +1,71 @@
+{
+  "baseline": "SLIM_Landing_Start_v1",
+  "engine_burns": false,
+  "trials": [
+    {
+      "kind": "normal_orientation",
+      "before": {
+        "mass_kg": 3085.957275390625,
+        "fuel": 78.56614685058594,
+        "oxidizer": 96.02528381347656,
+        "sas": false
+      },
+      "outcome": "ready_for_deorbit",
+      "elapsed_wall_s": 0.3070708999875933,
+      "after": {
+        "mass_kg": 3085.957275390625,
+        "fuel": 78.56614685058594,
+        "oxidizer": 96.02528381347656,
+        "sas": false,
+        "throttle": 0.0,
+        "thrust_N": 0.0,
+        "parts": 55
+      },
+      "log": "logs/flight_20261101T125417_010402Z.csv",
+      "rows": 6,
+      "events": [
+        "run_start",
+        "check_start",
+        "preflight_passed",
+        "alignment_start",
+        "ready_for_deorbit"
+      ]
+    },
+    {
+      "kind": "interrupted_orientation",
+      "before": {
+        "mass_kg": 3085.957275390625,
+        "fuel": 78.56614685058594,
+        "oxidizer": 96.02528381347656,
+        "sas": false
+      },
+      "outcome": "KeyboardInterrupt handled by cleanup",
+      "elapsed_wall_s": 0.2988467999966815,
+      "after": {
+        "mass_kg": 3085.957275390625,
+        "fuel": 78.56614685058594,
+        "oxidizer": 96.02528381347656,
+        "sas": false,
+        "throttle": 0.0,
+        "thrust_N": 0.0,
+        "parts": 55
+      },
+      "log": "logs/flight_20261101T125420_640814Z.csv",
+      "rows": 6,
+      "events": [
+        "run_start",
+        "check_start",
+        "preflight_passed",
+        "alignment_start",
+        "landing_interrupted"
+      ]
+    }
+  ],
+  "restored": {
+    "mass_kg": 3085.957275390625,
+    "parts": 55,
+    "throttle": 0.0,
+    "thrust_N": 0.0,
+    "paused": true
+  }
+}
