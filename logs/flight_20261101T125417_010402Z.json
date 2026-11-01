@@ -1,0 +1,71 @@
+{
+  "created_utc": "2026-11-01T12:54:17.015430+00:00",
+  "vessel": "SLIM",
+  "sampling_wall_interval_s": 0.2,
+  "time_basis": "KSP universal time (seconds)",
+  "speed_frame": "current body's non_rotating_reference_frame",
+  "surface_speed_frame": "current body's reference_frame",
+  "altitude_basis": "surface_altitude; mean_altitude is logged separately",
+  "delta_v_method": "trapezoidal integral of thrust/mass over KSP UT",
+  "initial_telemetry": {
+    "t": 0.0,
+    "ut": 63400.56032531756,
+    "phase": "initial",
+    "event": "run_start",
+    "body": "Mun",
+    "situation": "orbiting",
+    "altitude": 19320.64091833422,
+    "mean_altitude": 22696.278456465545,
+    "radius": 222696.2784564902,
+    "latitude": -3.515324490334743,
+    "longitude": -13.283645847636478,
+    "speed": 536.9340119486079,
+    "surface_speed": 526.9337096702263,
+    "vertical_speed": -9.603153695582037,
+    "horizontal_speed": 526.8461956073379,
+    "target_vertical_speed": null,
+    "mass": 3085.957275390625,
+    "dry_mass": 2213.0,
+    "throttle": 0.0,
+    "thrust": 0.0,
+    "available_thrust": 60000.0,
+    "specific_impulse": 345.0,
+    "liquid_fuel": 78.56614685058594,
+    "oxidizer": 96.02528381347656,
+    "electric_charge": 1000.0,
+    "apoapsis": 24578.791600677156,
+    "periapsis": 14507.882188096584,
+    "delta_v": 0.0,
+    "sample_dt": 0.0
+  },
+  "initial_position_inertial_m": [
+    207600.18793321218,
+    -13654.733789463753,
+    79431.37071455759
+  ],
+  "initial_velocity_inertial_m_s": [
+    -202.85474451736007,
+    -50.55268301113444,
+    494.5629505476529
+  ],
+  "initial_orbit": {
+    "semi_major_axis_m": 219543.33689438686,
+    "eccentricity": 0.02293603977019177,
+    "inclination_rad": 0.11353336796918508
+  },
+  "bodies": {
+    "Kerbin": {
+      "mu_m3_s2": 3531599999999.9995,
+      "equatorial_radius_m": 600000.0,
+      "rotational_period_s": 21549.425183089825,
+      "surface_gravity_m_s2": 9.81335114437652
+    },
+    "Mun": {
+      "mu_m3_s2": 65138397520.78069,
+      "equatorial_radius_m": 200000.0,
+      "rotational_period_s": 138984.37657447575,
+      "surface_gravity_m_s2": 1.629016227964847,
+      "orbit_semi_major_axis_m": 12000000.0
+    }
+  }
+}

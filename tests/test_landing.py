@@ -138,6 +138,49 @@ class LandingPreparationTests(unittest.TestCase):
         self.assertTrue(self.conn.krpc.paused)
         self.log.close.assert_called_once()
 
+    def test_full_landing_resumes_and_passes_the_detached_vessel_between_stages(self):
+        self.conn.krpc.paused = True
+        self.vessel.parts.all += [SimpleNamespace(name="sGripPad") for _ in range(4)]
+        self.vessel.parts.all += [SimpleNamespace(name="other") for _ in range(47)]
+        module = SimpleNamespace(**vars(self.vessel))
+        module.parts = SimpleNamespace(all=[object() for _ in range(51)])
+        order = []
+
+        def braking(*args, **kwargs):
+            self.assertFalse(self.conn.krpc.paused)
+            self.assertFalse(kwargs["checkpoint"])
+            self.log.vessel = module
+            order.append("brake")
+
+        def descent(conn, vessel, recorder, timeout, **kwargs):
+            self.assertIs(vessel, module)
+            self.assertFalse(self.conn.krpc.paused)
+            self.assertFalse(kwargs["checkpoint"])
+            order.append("descend")
+
+        def touchdown(conn, vessel, recorder, timeout):
+            self.assertIs(vessel, module)
+            order.append("touchdown")
+            self.log.phase = "landed"
+            return "landed"
+
+        with patch("landing.time.sleep"), patch("landing.brake_to_descent", side_effect=braking), patch("landing.descend_to_low_altitude", side_effect=descent), patch("landing.finish_touchdown", side_effect=touchdown):
+            self.assertEqual(run_landing(self.conn, full=True), "landed")
+        self.assertEqual(order, ["brake", "descend", "touchdown"])
+        self.assertTrue(self.conn.krpc.paused)
+        self.assertFalse(self.ctrl.sas)
+        self.assertEqual(self.ctrl.throttle, 0)
+
+    def test_full_landing_stops_if_the_module_lost_parts(self):
+        self.vessel.parts.all += [SimpleNamespace(name="sGripPad") for _ in range(4)]
+        self.vessel.parts.all += [SimpleNamespace(name="other") for _ in range(47)]
+        with patch("landing.time.sleep"), patch("landing.brake_to_descent"), patch("landing.descend_to_low_altitude") as descent:
+            with self.assertRaisesRegex(RuntimeError, "51 intact"):
+                run_landing(self.conn, full=True)
+        descent.assert_not_called()
+        self.assertTrue(self.conn.krpc.paused)
+        self.assertEqual(self.ctrl.throttle, 0)
+
     def test_invalid_braking_timeout_does_not_start(self):
         with self.assertRaises(ValueError):
             run_landing(self.conn, brake=True, brake_timeout=float("nan"))
@@ -187,6 +230,14 @@ class LandingPreparationTests(unittest.TestCase):
         self.assertTrue(self.conn.krpc.paused)
         self.sc.save.assert_called_once()
 
+        # The identical handoff condition must continue in integrated mode.
+        self.conn.krpc.paused = False
+        self.sc.save.reset_mock()
+        with patch("landing.time.sleep"):
+            self.assertEqual(brake_to_descent(self.conn, self.vessel, self.log, 30, checkpoint=False), "ready_for_vertical_descent")
+        self.assertFalse(self.conn.krpc.paused)
+        self.sc.save.assert_not_called()
+
     def test_descent_mode_accepts_detached_module_and_cleans_up(self):
         self.body.reference_frame = "surface"
         self.vessel.situation.name = "sub_orbital"
@@ -227,6 +278,15 @@ class LandingPreparationTests(unittest.TestCase):
         self.sc.transform_direction.assert_called_once_with((-1, 0, 0), "body_surface", "vessel_surface")
         self.assertEqual(self.ctrl.throttle, 0)
         self.assertTrue(self.conn.krpc.paused)
+
+        self.conn.krpc.paused = False
+        self.ctrl.throttle = .3
+        self.sc.save.reset_mock()
+        with patch("landing.time.sleep"):
+            self.assertEqual(descend_to_low_altitude(self.conn, self.vessel, self.log, 30, checkpoint=False), "ready_for_touchdown")
+        self.assertEqual(self.ctrl.throttle, .3)
+        self.assertFalse(self.conn.krpc.paused)
+        self.sc.save.assert_not_called()
 
     def test_vertical_thrust_is_not_cut_by_heading_error(self):
         self.body.reference_frame = "body_surface"
@@ -328,6 +388,9 @@ class TouchdownVerificationTests(unittest.TestCase):
         self.assertFalse(self.ctrl.sas)
         self.assertEqual(self.ap.time_to_peak, (1, 1, 1))
         self.assertTrue(self.log.filename.with_suffix(".touchdown.json").exists())
+        import json
+        result = json.loads(self.log.filename.with_suffix(".touchdown.json").read_text(encoding="utf-8"))
+        self.assertGreaterEqual(result["passive_stable_duration_s"], 30)
         self.log.log.assert_any_call(phase="landed",event="touchdown_confirmed")
         self.log.log.assert_any_call(phase="touchdown_passive",event="attitude_control_released")
 

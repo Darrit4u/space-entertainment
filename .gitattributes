@@ -1,0 +1,6 @@
+# Preserve the exact tested bytes and recorded SHA256 values on every platform.
+/landing.py -text
+/logger.py -text
+/run_landing_trial.py -text
+/logs/flight_* -text
+/saves/*.sfs text eol=crlf

@@ -1,0 +1,154 @@
+{
+  "files": [
+    {
+      "file": "logs/flight_20261101T125417_010402Z.csv",
+      "bytes": 2678,
+      "sha256": "41728230fd149f00da67d1c90a29bf4211bff2a3f16ff711a0b237e3125e9d71"
+    },
+    {
+      "file": "logs/flight_20261101T125417_010402Z.json",
+      "bytes": 2252,
+      "sha256": "caa059db658c0e02fb138b888653efe6b0af089813f46a7a8714e46861309ad5"
+    },
+    {
+      "file": "logs/flight_20261101T125420_640814Z.csv",
+      "bytes": 2688,
+      "sha256": "0ead7f2ee3bd9843d2487e905817dae2f2c8f9931d733960a18d1d71b734fade"
+    },
+    {
+      "file": "logs/flight_20261101T125420_640814Z.json",
+      "bytes": 2251,
+      "sha256": "24aa6eced94959d9d3f04b31a80f3571d32c77c76447229e2110cbe1824969ed"
+    },
+    {
+      "file": "logs/flight_20261101T133843_606105Z.csv",
+      "bytes": 355666,
+      "sha256": "252923738e87a3277d3575b4e58d6161de12e4e16d11959aea344fa2729dbcec"
+    },
+    {
+      "file": "logs/flight_20261101T133843_606105Z.json",
+      "bytes": 2251,
+      "sha256": "5a19c3cc8c289bdb0ea7d16ffbe3d6ff103122165f45d2b450fa165904394eab"
+    },
+    {
+      "file": "logs/flight_20261101T134530_616057Z.csv",
+      "bytes": 412484,
+      "sha256": "0715fad76b9fcafe7fa8bf03721171f89f228ef72f5d8019d0e0f0bf01169db8"
+    },
+    {
+      "file": "logs/flight_20261101T134530_616057Z.handoff.json",
+      "bytes": 1301,
+      "sha256": "aabcf00c8cd3c56ce9e904e7d974a8c8ac691aca81097a9c493de8930399538f"
+    },
+    {
+      "file": "logs/flight_20261101T134530_616057Z.json",
+      "bytes": 2250,
+      "sha256": "a683bcfdf26c7c93ce1783baaa97dadced0a11476fe25e3505dde3dd74d508fa"
+    },
+    {
+      "file": "logs/flight_20261101T140402_649657Z.csv",
+      "bytes": 211428,
+      "sha256": "1b0f7eb1fca7f37c8f97e9f7084225b15a750778d5e2d2ab45a4c478f0ec212c"
+    },
+    {
+      "file": "logs/flight_20261101T140402_649657Z.json",
+      "bytes": 2263,
+      "sha256": "0abd686eeada4f224a43ba9e45c38f397ed86ffb1c7cd6ce484b9b0a72dbe691"
+    },
+    {
+      "file": "logs/flight_20261101T141020_228933Z.csv",
+      "bytes": 441813,
+      "sha256": "49ebda0f61782164543c12996cb67b3c37331f535af635d22cd23c6db1e1fd9c"
+    },
+    {
+      "file": "logs/flight_20261101T141020_228933Z.handoff.json",
+      "bytes": 1347,
+      "sha256": "9d0731286cd462b63f13cb022fa46830575becd67d9f59daa9c94daa12a2edb8"
+    },
+    {
+      "file": "logs/flight_20261101T141020_228933Z.json",
+      "bytes": 2366,
+      "sha256": "751822dd4394b9a8ae62e59e7168295badd65f0a2010414c12175fca7c005efc"
+    },
+    {
+      "file": "logs/flight_20261101T144243_410510Z.csv",
+      "bytes": 279937,
+      "sha256": "8c66b2f247003d6af08ff53b0cf14f9f8eff604504d2dc1094758b156f081d11"
+    },
+    {
+      "file": "logs/flight_20261101T144243_410510Z.json",
+      "bytes": 2424,
+      "sha256": "1d1401c3bd8bfa7fc371f459269bb9de3ff9e81d0b1572849ba440faddb151d2"
+    },
+    {
+      "file": "logs/flight_20261101T144643_745313Z.csv",
+      "bytes": 281813,
+      "sha256": "0fb830de4f7ca811e70befcefb93aee39cb2d77d6af0b0def3db5663a4859675"
+    },
+    {
+      "file": "logs/flight_20261101T144643_745313Z.json",
+      "bytes": 2422,
+      "sha256": "0de3578d1d79eaca3bff92479352613ba755bb3d9cbbea50d06d33899a8eafbe"
+    },
+    {
+      "file": "logs/flight_20261101T154040_193070Z.csv",
+      "bytes": 154507,
+      "sha256": "52beb84a3128207300ba14d50fdfdf1343c1de027645f269c301dd0d4f25329b"
+    },
+    {
+      "file": "logs/flight_20261101T154040_193070Z.json",
+      "bytes": 2424,
+      "sha256": "56fa86fe43b8df16ebfeaf02c3e530677a12630b3e194de9b51388d93fd1251a"
+    },
+    {
+      "file": "logs/flight_20261101T154040_193070Z.touchdown.json",
+      "bytes": 1821,
+      "sha256": "edbb92e40bf22d6ae58a12c038a7e5b8bc30cd9d3b0db0a4b62dddc897c5c1cc"
+    },
+    {
+      "file": "logs/flight_20261101T154157_709664Z.csv",
+      "bytes": 109838,
+      "sha256": "137586b8e8969d411f631f03f31fe799feba8f522789e254b1ab2fe85a9d1afb"
+    },
+    {
+      "file": "logs/flight_20261101T154157_709664Z.json",
+      "bytes": 2422,
+      "sha256": "731fce92556e05864ba0b7242ba1a484b2a3a0f9326bf1e535ff279bda112823"
+    },
+    {
+      "file": "logs/flight_20261101T154157_709664Z.touchdown.json",
+      "bytes": 1825,
+      "sha256": "fe6a422698c1e038eb539f6bbfd78ac00a237e1c892e30855a618cb29d4d0193"
+    },
+    {
+      "file": "logs/flight_20261101T155855_769531Z.csv",
+      "bytes": 1103542,
+      "sha256": "0a466db650e43b800b0ef896d2912c6c60bcff080c96414ff72276abbd6a961b"
+    },
+    {
+      "file": "logs/flight_20261101T155855_769531Z.json",
+      "bytes": 2454,
+      "sha256": "3be0234a3a05920fa552c43cbbb6f0f929173817adc5c811a10ced8b36b87ab5"
+    },
+    {
+      "file": "logs/flight_20261101T155855_769531Z.touchdown.json",
+      "bytes": 1990,
+      "sha256": "bafcbbcbd4b54478792fea5f9f691be95282ee4f16cd1b5f40b75c31fa2b861a"
+    },
+    {
+      "file": "logs/flight_20261101T160741_955505Z.csv",
+      "bytes": 1085528,
+      "sha256": "fb5c677cb7239308e8bbf0e80777717ffa2a9147093e5494294e0bcbd62d1409"
+    },
+    {
+      "file": "logs/flight_20261101T160741_955505Z.json",
+      "bytes": 2453,
+      "sha256": "cc3d3f37bd1f11a4077d9f1f5cf8aa98d81fab451182e1d96153e67497895687"
+    },
+    {
+      "file": "logs/flight_20261101T160741_955505Z.touchdown.json",
+      "bytes": 1984,
+      "sha256": "5d6c5d3579a557b54225f38b2a10b2d6b9db942978c1ccbbcf9c83d02c81e8d6"
+    }
+  ]
+}

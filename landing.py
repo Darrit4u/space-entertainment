@@ -4,6 +4,7 @@
 orbital velocity, then pauses and saves the handoff for vertical descent.
 --descend continues from the detached module and stops above the surface.
 --touchdown continues from the low-altitude checkpoint and verifies contact.
+--full flies from Mun orbit to a verified landing without checkpoint pauses.
 """
 
 import argparse
@@ -16,6 +17,9 @@ import krpc
 
 from logger import FlightLogger
 
+CONTACT_SPEED_LIMIT = 3.5
+PAD_UP_LIMIT = -0.85
+PASSIVE_STABLE_SECONDS = 30.0
 
 def descent_acceleration(altitude, velocity, gravity, measured_vertical_acceleration):
     """Return target vertical speed and thrust acceleration in the surface frame."""
@@ -51,6 +55,7 @@ def finish_touchdown(conn, vessel, recorder, timeout):
     ap.target_direction = (1, 0, 0)
     ap.target_roll = 0
     ap.engage()
+    recorder.attitude_control_active = True
     recorder.log(phase="final_approach", event="final_approach_start")
     while True:
         now = time.monotonic()
@@ -97,14 +102,16 @@ def finish_touchdown(conn, vessel, recorder, timeout):
             print(f"Contact detected; pre-contact speed <= {contact['speed_upper_bound_m_s']:.2f} m/s, parts {initial_parts}", flush=True)
             phase = "settling"
         if phase in ("settling", "passive"):
-            settled = landed and horizontal < 0.2 and abs(velocity[0]) < 0.1 and angular_speed < 0.2 and pad_direction[0] < -0.85
+            settled = landed and horizontal < 0.2 and abs(velocity[0]) < 0.1 and angular_speed < 0.2 and pad_direction[0] < PAD_UP_LIMIT and ctrl.throttle == 0 and vessel.thrust <= 1
             stable_since = (ut if stable_since is None else stable_since) if settled else None
-            if stable_since is not None and ut - stable_since >= 3:
-                if contact["speed_upper_bound_m_s"] > 3.5:
+            required_duration = PASSIVE_STABLE_SECONDS if phase == "passive" else 3.0
+            if stable_since is not None and ut - stable_since >= required_duration:
+                if contact["speed_upper_bound_m_s"] > CONTACT_SPEED_LIMIT:
                     raise RuntimeError("Contact speed exceeded the 3.5 m/s acceptance limit")
                 if phase == "settling":
                     ap.disengage()
                     ctrl.sas = False
+                    recorder.attitude_control_active = False
                     phase = "passive"
                     stable_since = None
                     recorder.log(phase="touchdown_passive", event="attitude_control_released")
@@ -116,8 +123,8 @@ def finish_touchdown(conn, vessel, recorder, timeout):
                 save_name = f"SLIM_Landed_{stamp}"
                 sc.save(save_name)
                 with recorder.filename.with_suffix(".touchdown.json").open("x", encoding="utf-8") as file:
-                    json.dump({"save": save_name, "telemetry": str(recorder.filename), "contact": contact, "final": row, "parts": initial_parts, "pad_up_component": pad_direction[0], "angular_speed_rad_s": angular_speed}, file, ensure_ascii=False, indent=2)
-                print(f"Touchdown confirmed: all {initial_parts} parts intact, side pads down, stable for 3 seconds without attitude control", flush=True)
+                    json.dump({"save": save_name, "telemetry": str(recorder.filename), "contact": contact, "final": row, "parts": initial_parts, "pad_up_component": pad_direction[0], "angular_speed_rad_s": angular_speed, "passive_stable_duration_s": ut - stable_since, "contact_speed_limit_m_s": CONTACT_SPEED_LIMIT, "pad_up_limit": PAD_UP_LIMIT}, file, ensure_ascii=False, indent=2)
+                print(f"Touchdown confirmed: all {initial_parts} parts intact, side pads down, stable for {ut - stable_since:.1f} seconds without attitude control", flush=True)
                 return "landed"
         elif phase == "approach":
             if altitude < 2 or (altitude < 10 and velocity[0] < -3):
@@ -167,7 +174,7 @@ def finish_touchdown(conn, vessel, recorder, timeout):
         time.sleep(0.05)
 
 
-def descend_to_low_altitude(conn, vessel, recorder, timeout):
+def descend_to_low_altitude(conn, vessel, recorder, timeout, *, checkpoint=True):
     """Fly the detached module down to about 40 m, without attempting contact."""
     sc = conn.space_center
     body = sc.bodies["Mun"]
@@ -183,6 +190,7 @@ def descend_to_low_altitude(conn, vessel, recorder, timeout):
     started = last_progress = last_print = time.monotonic()
     last_ut = sc.ut
     previous_vertical = flight.vertical_speed
+    initial_parts = len(vessel.parts.all)
     while True:
         now = time.monotonic()
         if now - started > timeout:
@@ -191,6 +199,8 @@ def descend_to_low_altitude(conn, vessel, recorder, timeout):
             raise RuntimeError("Vertical descent telemetry failed") from recorder.error
         if conn.krpc.paused or sc.active_vessel != vessel or vessel.orbit.body != body:
             raise RuntimeError("Pause, vessel or body changed during vertical descent")
+        if len(vessel.parts.all) != initial_parts:
+            raise RuntimeError("A part was lost during vertical descent")
         ut = sc.ut
         if ut < last_ut:
             raise RuntimeError("KSP time moved backwards during vertical descent")
@@ -214,6 +224,9 @@ def descend_to_low_altitude(conn, vessel, recorder, timeout):
         if velocity[0] < -10 and altitude < emergency_height:
             raise RuntimeError("Descent entered the speed-dependent emergency altitude")
         if altitude <= 43 and abs(velocity[0]) <= 1.5 and horizontal <= 0.2:
+            if not checkpoint:
+                recorder.log(phase="touchdown_handoff", event="vertical_descent_complete")
+                return "ready_for_touchdown"
             ctrl.throttle = 0.0
             time.sleep(0.2)
             if ctrl.throttle != 0 or vessel.thrust > 1:
@@ -248,7 +261,7 @@ def descend_to_low_altitude(conn, vessel, recorder, timeout):
         time.sleep(0.1)
 
 
-def brake_to_descent(conn, vessel, recorder, timeout):
+def brake_to_descent(conn, vessel, recorder, timeout, *, checkpoint=True):
     """Use the Terrier, separate its empty stage, finish braking on the radial engines."""
     sc = conn.space_center
     body = sc.bodies["Mun"]
@@ -344,6 +357,9 @@ def brake_to_descent(conn, vessel, recorder, timeout):
             if horizontal <= 5 and -20 <= vertical <= 0:
                 ctrl.throttle = 0.0
                 sc.rails_warp_factor = 0
+                if not checkpoint:
+                    recorder.log(phase="descent_handoff", event="main_braking_complete")
+                    return "ready_for_vertical_descent"
                 time.sleep(0.2)
                 if ctrl.throttle != 0 or vessel.thrust > 1:
                     raise RuntimeError("Thrust did not stop before saving the descent handoff")
@@ -380,7 +396,11 @@ def brake_to_descent(conn, vessel, recorder, timeout):
         time.sleep(0.1)
 
 
-def run_landing(conn, *, prepare=False, timeout=30.0, brake=False, brake_timeout=900.0, descend=False, descent_timeout=600.0, touchdown=False, touchdown_timeout=120.0):
+def run_landing(conn, *, prepare=False, timeout=30.0, brake=False, brake_timeout=900.0, descend=False, descent_timeout=600.0, touchdown=False, touchdown_timeout=180.0, full=False):
+    if full and (prepare or brake or descend or touchdown):
+        raise ValueError("Choose full landing independently of the other modes")
+    if full:
+        brake = True
     if not math.isfinite(timeout) or timeout <= 0:
         raise ValueError("Timeout must be finite and positive")
     if not math.isfinite(brake_timeout) or brake_timeout <= 0:
@@ -402,7 +422,7 @@ def run_landing(conn, *, prepare=False, timeout=30.0, brake=False, brake_timeout
     recorder = None
     owns_controls = False
     original_sas = ctrl.sas
-    original_tuning = (ap.time_to_peak, ap.stopping_time, ap.deceleration_time, ap.target_roll) if touchdown else None
+    original_tuning = (ap.time_to_peak, ap.stopping_time, ap.deceleration_time, ap.target_roll) if touchdown or full else None
     try:
         recorder = FlightLogger(vessel, sc)
         print(f"Telemetry: {recorder.filename}", flush=True)
@@ -413,6 +433,8 @@ def run_landing(conn, *, prepare=False, timeout=30.0, brake=False, brake_timeout
             raise ValueError("Landing preparation requires a Mun orbit")
         if not module_mode and (vessel.situation.name != "orbiting" or vessel.orbit.periapsis_altitude <= 0):
             raise ValueError("Start from the intact vessel in SLIM_Landing_Start_v1")
+        if full and (len(vessel.parts.all) != 55 or sum(p.name == "sGripPad" for p in vessel.parts.all) != 4):
+            raise ValueError("Full landing requires the intact 55-part craft with four side pads")
         if descend:
             initial_flight = vessel.flight(vessel.orbit.body.reference_frame)
             if vessel.situation.name != "sub_orbital" or not 100 < initial_flight.surface_altitude < 15000:
@@ -466,12 +488,14 @@ def run_landing(conn, *, prepare=False, timeout=30.0, brake=False, brake_timeout
         print("Preflight passed: Mun, expected configuration, propellant, thrust and attitude control.", flush=True)
         if not prepare and not module_mode:
             return "preflight_passed"
-        if conn.krpc.paused:
+        if conn.krpc.paused and not full:
             raise ValueError("Resume KSP before starting flight control; --check works while paused")
 
         # Own the controls only after the read-only checks have passed.
         owns_controls = True
         ctrl.throttle = 0.0
+        if full:
+            conn.krpc.paused = False
         if touchdown:
             return finish_touchdown(conn, vessel, recorder, touchdown_timeout)
         if descend:
@@ -509,6 +533,13 @@ def run_landing(conn, *, prepare=False, timeout=30.0, brake=False, brake_timeout
             time.sleep(0.1)
         recorder.log(event="ready_for_deorbit")
         if brake:
+            if full:
+                brake_to_descent(conn, vessel, recorder, brake_timeout, checkpoint=False)
+                vessel = recorder.vessel
+                if len(vessel.parts.all) != 51:
+                    raise RuntimeError("Expected 51 intact module parts after stage separation")
+                descend_to_low_altitude(conn, vessel, recorder, descent_timeout, checkpoint=False)
+                return finish_touchdown(conn, vessel, recorder, touchdown_timeout)
             return brake_to_descent(conn, vessel, recorder, brake_timeout)
         print("Orientation ready. Engines were not fired; deorbit is the next iteration.", flush=True)
         return "ready_for_deorbit"
@@ -543,7 +574,7 @@ def run_landing(conn, *, prepare=False, timeout=30.0, brake=False, brake_timeout
                     finally:
                         if original_tuning is not None:
                             ap.time_to_peak, ap.stopping_time, ap.deceleration_time, ap.target_roll = original_tuning
-                        ctrl.sas = original_sas
+                        ctrl.sas = False if recorder.phase == "landed" else original_sas
             finally:
                 if recorder is not None:
                     recorder.close()
@@ -557,10 +588,11 @@ if __name__ == "__main__":
     mode.add_argument("--brake", action="store_true", help="Deorbit, brake, separate the empty stage, finish on radial engines, then pause and save")
     mode.add_argument("--descend", action="store_true", help="Continue from the detached module to about 40 m, then pause and save; no contact")
     mode.add_argument("--touchdown", action="store_true", help="Final descent, engines-off turn and verified contact from the low-altitude checkpoint")
+    mode.add_argument("--full", action="store_true", help="Fly from Mun orbit to landing in one run; accepts a paused start and resumes after preflight")
     parser.add_argument("--timeout", type=float, default=30, help="Maximum orientation wait in wall-clock seconds")
     parser.add_argument("--brake-timeout", type=float, default=900, help="Maximum deorbit/coast/braking duration in wall-clock seconds")
     parser.add_argument("--descent-timeout", type=float, default=600, help="Maximum vertical-descent duration in wall-clock seconds")
-    parser.add_argument("--touchdown-timeout", type=float, default=120, help="Maximum final-approach and settling duration in wall-clock seconds")
+    parser.add_argument("--touchdown-timeout", type=float, default=180, help="Maximum final-approach and settling duration in wall-clock seconds")
     args = parser.parse_args()
     if not math.isfinite(args.timeout) or args.timeout <= 0:
         parser.error("--timeout must be finite and positive")
@@ -572,7 +604,7 @@ if __name__ == "__main__":
         parser.error("--touchdown-timeout must be finite and positive")
     conn = krpc.connect(name="SLIM landing preparation", rpc_port=5000, stream_port=5001)
     try:
-        run_landing(conn, prepare=args.prepare, timeout=args.timeout, brake=args.brake, brake_timeout=args.brake_timeout, descend=args.descend, descent_timeout=args.descent_timeout, touchdown=args.touchdown, touchdown_timeout=args.touchdown_timeout)
+        run_landing(conn, prepare=args.prepare, timeout=args.timeout, brake=args.brake, brake_timeout=args.brake_timeout, descend=args.descend, descent_timeout=args.descent_timeout, touchdown=args.touchdown, touchdown_timeout=args.touchdown_timeout, full=args.full)
     except KeyboardInterrupt:
         parser.exit(130, "Landing preparation interrupted; cleanup attempted.\n")
     except Exception as error:

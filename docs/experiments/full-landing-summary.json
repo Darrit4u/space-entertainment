@@ -1,0 +1,53 @@
+{
+  "scope": "Two complete Mun-orbit-to-surface trials; no intermediate checkpoint loads",
+  "trials": [
+    {
+      "trial": 1,
+      "result": "docs/experiments/full-landing-trial-1.json",
+      "csv": "logs/flight_20261101T155855_769531Z.csv",
+      "rows": 2312,
+      "flight_ut_duration_s": 845.7599999195081,
+      "contact_speed_estimate_m_s": 3.0211966763632456,
+      "propellant_remaining_kg": 152.1466064453125,
+      "passive_stable_duration_s": 30.019999995194667,
+      "verified_last_30s_samples": 137,
+      "last_30s_max_horizontal_m_s": 0.14971769569519172,
+      "last_30s_max_abs_vertical_m_s": 0.0795584413239962,
+      "final_pad_up": -0.9970479774859797,
+      "final_angular_rad_s": 4.520799327446848e-05
+    },
+    {
+      "trial": 2,
+      "result": "docs/experiments/full-landing-trial-2.json",
+      "csv": "logs/flight_20261101T160741_955505Z.csv",
+      "rows": 2282,
+      "flight_ut_duration_s": 839.0606151548491,
+      "contact_speed_estimate_m_s": 3.005096173974938,
+      "propellant_remaining_kg": 158.7646484375,
+      "passive_stable_duration_s": 30.039999995191465,
+      "verified_last_30s_samples": 136,
+      "last_30s_max_horizontal_m_s": 0.12008048030200212,
+      "last_30s_max_abs_vertical_m_s": 0.060794534964753746,
+      "final_pad_up": -0.994292345042908,
+      "final_angular_rad_s": 4.5208604056983075e-05
+    }
+  ],
+  "selected_checkpoint": {
+    "name": "SLIM_Full_Landed_v1",
+    "file": "saves/SLIM_Full_Landed_v1.sfs",
+    "sha256": "1c02c78bb5b337ba7422001fc6fc91e4e633eb0e3ddb82ec10c262a806b4e2ae",
+    "trial": 2,
+    "parts": 51,
+    "mass_kg": 1511.7646484375,
+    "propellant_kg": 158.7646484375,
+    "ideal_delta_v_m_s": 315.5431401525482,
+    "paused": true,
+    "sas": false
+  },
+  "baseline_sha256": "48be577401e9c85bbcddeed82f61fe904dff6967e3113ac28774f90402110e03",
+  "code_sha256": {
+    "landing.py": "8db8f14a71c596161cf754a67d8baefd2f8e52cf3292fb4f5ffb6cd895ad5e26",
+    "logger.py": "33f7201c6629008fedce32e8af066861aa0b47886951a9dd928fcdc51c73f7aa",
+    "run_landing_trial.py": "fa333effb154abeed709d5bdfcc83db2a9bc41f50dcdcb00d551bf08d30541ee"
+  }
+}

@@ -31,6 +31,7 @@ class FlightLogger:
         self.commanded_up_acceleration = None
         self.pad_up_component = None
         self.angular_speed = None
+        self.attitude_control_active = None
         self.error = None
         self._stop = threading.Event()
         self._lock = threading.Lock()
@@ -45,6 +46,7 @@ class FlightLogger:
             "electric_charge", "apoapsis", "periapsis", "delta_v", "sample_dt",
             "attitude_error_deg", "thrust_up_component", "commanded_up_acceleration",
             "pad_up_component", "angular_speed",
+            "attitude_control_active",
         ]
         self.writer = csv.DictWriter(self.file, fieldnames=fields)
         self.writer.writeheader()
@@ -144,6 +146,7 @@ class FlightLogger:
                 "commanded_up_acceleration": self.commanded_up_acceleration,
                 "pad_up_component": self.pad_up_component,
                 "angular_speed": self.angular_speed,
+                "attitude_control_active": self.attitude_control_active,
             }
             self.writer.writerow(row)
             self.file.flush()

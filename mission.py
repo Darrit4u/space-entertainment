@@ -1,3 +1,6 @@
+"""Legacy transfer/landing prototype; use landing.py --full for Mun landing."""
+
+import argparse
 import krpc
 import math
 import time
@@ -342,5 +345,10 @@ class SlimAutopilot:
 # MAIN
 # ======================================================
 if __name__ == '__main__':
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument('--legacy-full-mission', action='store_true', help='Explicitly opt into the unverified legacy full-mission prototype')
+    args = parser.parse_args()
+    if not args.legacy_full_mission:
+        parser.error('Legacy mission is unverified. For Mun landing use: python landing.py --full (see docs/landing-run.md).')
     slim = SlimAutopilot()
     slim.run()
