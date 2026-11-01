@@ -1,0 +1,31 @@
+{
+  "ut": 8572.31322373836,
+  "delta": [
+    -248.11556323669208,
+    178.52379952673027,
+    786.9635876947359
+  ],
+  "delta_v_m_s": 844.2415342039809,
+  "arrival_estimate_ut": 38572.31322373836,
+  "goal_inertial_m": [
+    -11997969.432584025,
+    -8480.576907229122,
+    -3643116.0157250334
+  ],
+  "long_path": true,
+  "rank": 1145.5948408158927,
+  "prograde": 842.314950731687,
+  "normal": -8.218940646050907,
+  "radial": -58.434863671617435,
+  "predicted_encounter": {
+    "periapsis_altitude_m": 49453.94641111023,
+    "periapsis_radius_m": 249453.94641111023,
+    "eccentricity": 1.2945548205715025
+  },
+  "candidate_count": 36,
+  "planned_delta_v_m_s": 844.3794529142618,
+  "baseline": "SLIM_Transfer_Start_v1",
+  "baseline_sha256": "6fc99f34d3a2deedd70ae68706ea50d3f5cca3e20c833aad0385f536b7bdb03d",
+  "planning_ut": 2851.6180855987427,
+  "state": "predicted_encounter_only"
+}

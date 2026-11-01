@@ -1,0 +1,237 @@
+{
+  "scope": "Executed departure and one correction per trial; future Mun SOI entry predicted, capture not performed",
+  "trials": [
+    {
+      "trial": 1,
+      "result": "docs/experiments/transfer-burn-trial-1.json",
+      "telemetry": "logs/flight_20261101T171838_311307Z.csv",
+      "csv_rows": 1585,
+      "initial_mass_kg": 4653.0,
+      "main_burn_duration_ut_s": 92.80000000202563,
+      "correction_delta_v_m_s": 2.242079971188767,
+      "predicted_mun_periapsis_m": 67602.95178527304,
+      "central_propellant_kg": 966.09912109375,
+      "delta_v_thrust_integral_m_s": 857.0761070843029,
+      "delta_v_mass_equivalent_m_s": 850.1779960845676,
+      "integral_vs_mass_relative_error": 0.008113725633342783,
+      "remaining_ideal_delta_v_above_landing_reserve_m_s": 539.1258388932775,
+      "estimated_capture_to_circular_at_current_periapsis_m_s": 258.2298395533743,
+      "events": [
+        {
+          "ut": "2851.5980855987427",
+          "t": "0.0",
+          "phase": "initial",
+          "event": "run_start",
+          "mass": "4653.0",
+          "delta_v": "0.0"
+        },
+        {
+          "ut": "2851.6180855987427",
+          "t": "0.01999999999998181",
+          "phase": "transfer_wait",
+          "event": "node_alignment_start",
+          "mass": "4653.0",
+          "delta_v": "0.0"
+        },
+        {
+          "ut": "8543.358671537946",
+          "t": "5691.760585939203",
+          "phase": "transfer_burn",
+          "event": "burn_start",
+          "mass": "4653.0",
+          "delta_v": "0.0"
+        },
+        {
+          "ut": "8636.158671539972",
+          "t": "5784.560585941229",
+          "phase": "transfer_burn",
+          "event": "transfer_burn_complete",
+          "mass": "3621.3486328125",
+          "delta_v": "854.8497883751437"
+        },
+        {
+          "ut": "8636.51867153998",
+          "t": "5784.920585941237",
+          "phase": "transfer_correction",
+          "event": "correction_planned",
+          "mass": "3621.3486328125",
+          "delta_v": "854.8497883751437"
+        },
+        {
+          "ut": "8636.53867153998",
+          "t": "5784.940585941237",
+          "phase": "transfer_wait",
+          "event": "node_alignment_start",
+          "mass": "3621.3486328125",
+          "delta_v": "854.8497883751437"
+        },
+        {
+          "ut": "8936.098183260405",
+          "t": "6084.500097661662",
+          "phase": "transfer_burn",
+          "event": "burn_start",
+          "mass": "3621.3486328125",
+          "delta_v": "854.8497883751437"
+        },
+        {
+          "ut": "8940.278183260496",
+          "t": "6088.680097661753",
+          "phase": "transfer_burn",
+          "event": "transfer_burn_complete",
+          "mass": "3619.09912109375",
+          "delta_v": "857.0761070843029"
+        },
+        {
+          "ut": "8940.298183260496",
+          "t": "6088.700097661754",
+          "phase": "transfer_ready",
+          "event": "safe_mun_approach_confirmed",
+          "mass": "3619.09912109375",
+          "delta_v": "857.0761070843029"
+        }
+      ]
+    },
+    {
+      "trial": 2,
+      "result": "docs/experiments/transfer-burn-trial-2.json",
+      "telemetry": "logs/flight_20261101T172522_154320Z.csv",
+      "csv_rows": 1589,
+      "initial_mass_kg": 4653.0,
+      "main_burn_duration_ut_s": 92.80000000202563,
+      "correction_delta_v_m_s": 2.195805876884911,
+      "predicted_mun_periapsis_m": 67933.9788464763,
+      "central_propellant_kg": 966.1314697265625,
+      "delta_v_thrust_integral_m_s": 858.044712206537,
+      "delta_v_mass_equivalent_m_s": 850.1476411684193,
+      "integral_vs_mass_relative_error": 0.009289058341988898,
+      "remaining_ideal_delta_v_above_landing_reserve_m_s": 539.1561938094263,
+      "estimated_capture_to_circular_at_current_periapsis_m_s": 258.1411049665301,
+      "events": [
+        {
+          "ut": "2851.5980855987427",
+          "t": "0.0",
+          "phase": "initial",
+          "event": "run_start",
+          "mass": "4653.0",
+          "delta_v": "0.0"
+        },
+        {
+          "ut": "2851.5980855987427",
+          "t": "0.0",
+          "phase": "transfer_wait",
+          "event": "node_alignment_start",
+          "mass": "4653.0",
+          "delta_v": "0.0"
+        },
+        {
+          "ut": "8543.378280912955",
+          "t": "5691.7801953142125",
+          "phase": "transfer_burn",
+          "event": "burn_start",
+          "mass": "4653.0",
+          "delta_v": "0.0"
+        },
+        {
+          "ut": "8636.17828091498",
+          "t": "5784.580195316238",
+          "phase": "transfer_burn",
+          "event": "transfer_burn_complete",
+          "mass": "3621.328369140625",
+          "delta_v": "855.7638471547529"
+        },
+        {
+          "ut": "8636.538280914989",
+          "t": "5784.940195316246",
+          "phase": "transfer_correction",
+          "event": "correction_planned",
+          "mass": "3621.328369140625",
+          "delta_v": "855.7638471547529"
+        },
+        {
+          "ut": "8636.59828091499",
+          "t": "5785.000195316247",
+          "phase": "transfer_wait",
+          "event": "node_alignment_start",
+          "mass": "3621.328369140625",
+          "delta_v": "855.7638471547529"
+        },
+        {
+          "ut": "8936.1583688073",
+          "t": "6084.560283208558",
+          "phase": "transfer_burn",
+          "event": "burn_start",
+          "mass": "3621.328369140625",
+          "delta_v": "855.7638471547529"
+        },
+        {
+          "ut": "8940.298368807391",
+          "t": "6088.700283208648",
+          "phase": "transfer_burn",
+          "event": "transfer_burn_complete",
+          "mass": "3619.131591796875",
+          "delta_v": "858.044712206537"
+        },
+        {
+          "ut": "8940.298368807391",
+          "t": "6088.700283208648",
+          "phase": "transfer_ready",
+          "event": "safe_mun_approach_confirmed",
+          "mass": "3619.131591796875",
+          "delta_v": "858.044712206537"
+        }
+      ]
+    }
+  ],
+  "evidence_files": [
+    {
+      "file": "logs/flight_20261101T171838_311307Z.csv",
+      "sha256": "ad4f411b81e885f4be96a0eb027ebe968ffee58d5834e334e0dfccfc84ec2de1"
+    },
+    {
+      "file": "logs/flight_20261101T171838_311307Z.json",
+      "sha256": "615bedb39c6b538c4c98e3664679bc59bb02b316ecc37a883ea8b779429b7282"
+    },
+    {
+      "file": "logs/flight_20261101T172522_154320Z.csv",
+      "sha256": "e8fcc6e8403b3e984f460f54d70eca79a7c8d1bed7161b9d658f7ca4e91d7913"
+    },
+    {
+      "file": "logs/flight_20261101T172522_154320Z.json",
+      "sha256": "e8f9bc4d3e8b40b13a88f10fa712f6ab84bb5f2c172920fdf22b507c5c337265"
+    }
+  ],
+  "selected_checkpoint": {
+    "name": "SLIM_Transfer_Ready_v1",
+    "file": "saves/SLIM_Transfer_Ready_v1.sfs",
+    "sha256": "14212575c4e44afd52efd96d73efddcb02d8018fe96c01c9bdc54c5d6f77328a",
+    "source_trial": 2,
+    "ut": 8940.298368807391,
+    "body": "Kerbin",
+    "parts": 55,
+    "module_propellant_kg": 440.0,
+    "central_propellant_kg": 966.1314697265625,
+    "paused": true,
+    "throttle": 0.0,
+    "thrust_N": 0.0,
+    "sas": false,
+    "time_to_soi_change_s": 23749.95074246073
+  },
+  "baseline_sha256": "6fc99f34d3a2deedd70ae68706ea50d3f5cca3e20c833aad0385f536b7bdb03d",
+  "code_sha256_lf": {
+    "transfer.py": "4de8518070bbd042c565652b82008cab8c409313e824806ff62cb13b64a5afbe",
+    "math_logic.py": "8da32a33d6eab00d33402dd5919986c1c222e00eae5801be42d20b11d8976900"
+  },
+  "input_plan_sha256_lf": "5b306410c01a169702093d0e2006adb0e075da2b6fc4e2c8ba74c7c304a46dd2",
+  "checkpoint_reload_verification": {
+    "ut": 8941.858368807425,
+    "parts": 55,
+    "mass_kg": 3619.131591796875,
+    "paused": true,
+    "throttle": 0.0,
+    "thrust_N": 0.0,
+    "predicted_next_body": "Mun",
+    "predicted_mun_periapsis_m": 67932.77269913175,
+    "time_to_soi_change_s": 23748.39169871841,
+    "note": "Load and read-only verification; no engine or autopilot commands"
+  }
+}

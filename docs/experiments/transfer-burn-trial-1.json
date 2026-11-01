@@ -1,0 +1,65 @@
+{
+  "outcome": "transfer_ready",
+  "save": "SLIM_Transfer_Ready_20261101T172429_456171Z",
+  "telemetry": "logs/flight_20261101T171838_311307Z.csv",
+  "actual_trajectory_prediction": {
+    "periapsis_altitude_m": 67602.95178527304,
+    "periapsis_radius_m": 267602.95178527304,
+    "eccentricity": 1.3207461712182784
+  },
+  "correction": {
+    "ut": 8936.158671539972,
+    "delta_v_m_s": 2.242079971188767,
+    "prediction": {
+      "periapsis_altitude_m": 50941.528362502315,
+      "periapsis_radius_m": 250941.52836250231,
+      "eccentricity": 1.3003822417151683
+    }
+  },
+  "final": {
+    "t": 6088.700097661754,
+    "ut": 8940.298183260496,
+    "phase": "transfer_ready",
+    "event": "safe_mun_approach_confirmed",
+    "body": "Kerbin",
+    "situation": "orbiting",
+    "altitude": 402535.8746342929,
+    "mean_altitude": 402867.09047227097,
+    "radius": 1002867.0904722726,
+    "latitude": 11.689773128141793,
+    "longitude": -155.07007088993691,
+    "speed": 2552.0201825537406,
+    "surface_speed": 2314.4210132046155,
+    "vertical_speed": 1343.5542357215777,
+    "horizontal_speed": 1884.5176152102388,
+    "target_vertical_speed": null,
+    "mass": 3619.09912109375,
+    "dry_mass": 2213.0,
+    "throttle": 0.0,
+    "thrust": 0.0,
+    "available_thrust": 60000.0,
+    "specific_impulse": 345.0,
+    "liquid_fuel": 126.5489273071289,
+    "oxidizer": 154.67091369628906,
+    "electric_charge": 1000.0,
+    "apoapsis": 12013807.386533625,
+    "periapsis": 107956.74419142504,
+    "delta_v": 857.0761070843029,
+    "sample_dt": 0.020000000000436557,
+    "attitude_error_deg": 1.2760031890487766,
+    "thrust_up_component": null,
+    "commanded_up_acceleration": null,
+    "pad_up_component": null,
+    "angular_speed": null,
+    "attitude_control_active": false
+  },
+  "parts": 55,
+  "central_propellant_kg": 966.09912109375,
+  "time_to_soi_change_s": 23746.102809304386,
+  "limitation": "Mun encounter is predicted from the actual orbit; SOI entry and capture are the next iteration",
+  "input_plan_sha256_lf": "5b306410c01a169702093d0e2006adb0e075da2b6fc4e2c8ba74c7c304a46dd2",
+  "code_sha256_lf": {
+    "transfer.py": "4de8518070bbd042c565652b82008cab8c409313e824806ff62cb13b64a5afbe",
+    "math_logic.py": "8da32a33d6eab00d33402dd5919986c1c222e00eae5801be42d20b11d8976900"
+  }
+}

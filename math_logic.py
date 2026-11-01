@@ -5,6 +5,52 @@ class OrbitalMath:
     """SI units and radians; circular Hohmann estimates do not prove an encounter."""
 
     @staticmethod
+    def lambert(mu, departure, arrival, duration, *, long_path=False):
+        """Zero-revolution universal-variable Lambert solution, returning v0, v1.
+
+        Bounded bisection of the time-of-flight equation, not ODE integration.
+        Equations: https://docs.poliastro.space/en/stable/autoapi/poliastro/core/iod/index.html
+        Collinear geometry is excluded because it does not define a unique plane.
+        """
+        if not math.isfinite(mu) or mu <= 0 or not math.isfinite(duration) or duration <= 0:
+            raise ValueError("mu and transfer duration must be finite and positive")
+        if any(len(v) != 3 or not all(math.isfinite(x) for x in v) for v in (departure, arrival)):
+            raise ValueError("Positions must have three finite components")
+        r0, r1 = map(OrbitalMath.vector_norm, (departure, arrival))
+        if min(r0, r1) == 0:
+            raise ValueError("Positions must be nonzero")
+        cosine = max(-1.0, min(1.0, OrbitalMath.dot(departure, arrival) / (r0*r1)))
+        if abs(cosine) > 1-1e-12:
+            raise ValueError("Collinear Lambert geometry is undefined")
+        a = math.sqrt(r0*r1*(1+cosine)) * (-1 if long_path else 1)
+        lower, upper = -4*math.pi**2, 4*math.pi**2-1e-6
+        for _ in range(100):
+            z = (lower+upper)/2
+            if abs(z) < 1e-5:
+                c = .5-z/24+z*z/720-z*z*z/40320
+                s = 1/6-z/120+z*z/5040-z*z*z/362880
+            elif z > 0:
+                q = math.sqrt(z)
+                c, s = (1-math.cos(q))/z, (q-math.sin(q))/q**3
+            else:
+                q = math.sqrt(-z)
+                c, s = (math.cosh(q)-1)/(-z), (math.sinh(q)-q)/q**3
+            y = r0+r1+a*(z*s-1)/math.sqrt(c)
+            if y <= 0:
+                lower = z
+                continue
+            time_of_flight = ((y/c)**1.5*s+a*math.sqrt(y))/math.sqrt(mu)
+            if abs(time_of_flight-duration) < 1e-5:
+                f, g, gd = 1-y/r0, a*math.sqrt(y/mu), 1-y/r1
+                return (tuple((b-f*x)/g for x,b in zip(departure, arrival)),
+                        tuple((gd*b-x)/g for x,b in zip(departure, arrival)))
+            if time_of_flight < duration:
+                lower = z
+            else:
+                upper = z
+        raise ValueError("Lambert time-of-flight bisection did not converge")
+
+    @staticmethod
     def hohmann_delta_v(mu, r1, r2):
         """
         Signed prograde impulses between circular coplanar orbits.
