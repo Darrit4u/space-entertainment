@@ -3,6 +3,10 @@ __pycache__/
 *.py[codz]
 *$py.class
 
+# Pycharm
+.idea/
+.idea/*
+
 # C extensions
 *.so
 
